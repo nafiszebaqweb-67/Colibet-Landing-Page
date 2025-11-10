@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Collibet Tailoring Design System - Sky Blue + Yellow */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 15%;
+
+    /* Primary - Bright Sky Blue */
+    --primary: 200 95% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Bright Yellow */
+    --secondary: 48 100% 55%;
+    --secondary-foreground: 0 0% 15%;
+
+    --muted: 200 30% 95%;
+    --muted-foreground: 0 0% 45%;
+
+    /* Accent - Vibrant Yellow */
+    --accent: 48 100% 55%;
+    --accent-foreground: 0 0% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 30% 90%;
+    --input: 200 30% 90%;
+    --ring: 200 95% 50%;
+
+    --radius: 1rem;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(200 95% 50% / 0.65), hsl(200 90% 60% / 0.6));
+    --gradient-hero-fade: linear-gradient(180deg, hsl(200 95% 50% / 0.65) 0%, hsl(200 90% 65% / 0.5) 50%, hsl(200 85% 60%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(48 100% 55%), hsl(48 100% 65%));
+    
+    /* Section Gradients - Blue */
+    --gradient-section-blue-in: linear-gradient(180deg, hsl(200 85% 85% / 0) 0%, hsl(200 85% 75% / 0.3) 30%, hsl(200 85% 60%) 100%);
+    --gradient-section-blue-out: linear-gradient(180deg, hsl(200 85% 60%) 0%, hsl(200 85% 75% / 0.3) 70%, hsl(200 85% 85% / 0) 100%);
+    
+    /* Section Gradients - Yellow */
+    --gradient-section-yellow-in: linear-gradient(180deg, hsl(48 100% 85% / 0) 0%, hsl(48 100% 70% / 0.3) 30%, hsl(48 100% 65%) 100%);
+    --gradient-section-yellow-out: linear-gradient(180deg, hsl(48 100% 65%) 0%, hsl(48 100% 70% / 0.3) 70%, hsl(48 100% 85% / 0) 100%);
+    
+    /* Shadows - Professional with Two-Layer Approach */
+    --shadow-elegant: 0 4px 20px -4px hsl(200 95% 50% / 0.15), 0 2px 6px -2px hsl(200 95% 50% / 0.1);
+    --shadow-hover: 0 8px 30px -6px hsl(200 95% 50% / 0.25), 0 4px 10px -3px hsl(200 95% 50% / 0.15);
+    --shadow-gold: 0 4px 20px -4px hsl(48 100% 55% / 0.3), 0 2px 6px -2px hsl(48 100% 55% / 0.2);
+    --shadow-card: 0 8px 24px -8px hsl(0 0% 0% / 0.08), 0 2px 4px -1px hsl(0 0% 0% / 0.06);
+    --shadow-card-hover: 0 12px 32px -8px hsl(0 0% 0% / 0.12), 0 4px 8px -2px hsl(0 0% 0% / 0.08);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 200 80% 10%;
+    --foreground: 0 0% 100%;
+    --card: 200 70% 15%;
+    --card-foreground: 0 0% 100%;
+    --primary: 200 95% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 48 100% 55%;
+    --secondary-foreground: 0 0% 15%;
+    --accent: 48 100% 55%;
+    --accent-foreground: 0 0% 15%;
+    --border: 200 40% 25%;
+    --input: 200 40% 25%;
+    --ring: 200 95% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl leading-tight tracking-tight;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl leading-tight tracking-tight;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl leading-snug tracking-tight;
+  }
+
+  p, body {
+    @apply leading-relaxed;
+  }
+
+  .lead {
+    @apply text-lg md:text-xl leading-relaxed;
+  }
+}
+
+@layer utilities {
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-accent to-yellow-400 bg-clip-text text-transparent;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
