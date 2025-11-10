@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Sparkles } from "lucide-react";
-import heroBackground from "@/assets/hero-background.jpg";
+import heroBackground from "@/assets/expert-suitmaker-tailoring-studio.jpg";
 
 interface HeroProps {
   onStartOrder: () => void;
