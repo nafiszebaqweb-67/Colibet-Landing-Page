@@ -37,7 +37,7 @@ export const SocialProof = () => {
     <section className="py-20" style={{ background: 'var(--gradient-section-blue-out)' }}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
-          <div className="inline-block bg-accent/10 rounded-full px-6 py-2 mb-4">
+          <div className="inline-block bg-accent/20 backdrop-blur-sm border border-accent/30 rounded-full px-6 py-2 mb-4">
             <p className="text-accent font-semibold">⭐ Trusted in Ranchi</p>
           </div>
           <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">

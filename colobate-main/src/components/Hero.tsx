@@ -27,12 +27,12 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         {/* Trust Badge */}
         <div className="inline-flex items-center gap-2 bg-accent/20 backdrop-blur-sm border border-accent/30 rounded-full px-4 py-2 mb-6">
           <Sparkles className="w-4 h-4 text-accent" />
-          <span className="text-sm text-accent font-medium">Trusted by 500+ Ranchi Customers</span>
+          <span className="text-sm text-accent font-medium">Trusted by 500+ Customers in Ranchi </span>
         </div>
 
         {/* Main Heading */}
         <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl text-primary-foreground mb-4 leading-tight">
-          Ranchi's Fastest Custom Tailor — <span className="text-gradient-gold">Designed, Stitched & Delivered</span> in 24 Hours.
+          Ranchi's Fastest Custom Tailor <span className="text-gradient-gold">Designed, Stitched & Delivered</span> <br></br>In 24 Hours.
         </h1>
 
         {/* Subheading */}
