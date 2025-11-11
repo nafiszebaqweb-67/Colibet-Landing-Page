@@ -28,7 +28,7 @@ export const AboutSection = () => {
             {features.map((feature, index) => (
               <div 
                 key={index}
-                className="flex items-start gap-4 p-6 bg-card border border-accent/20 rounded-lg hover:shadow-lg transition-all animate-slide-up hover:border-accent/40"
+                className="flex items-start gap-4 p-6 bg-card/80 backdrop-blur-sm border border-accent/20 rounded-lg hover:shadow-lg transition-all animate-slide-up hover:border-accent/40"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="text-3xl">{feature.icon}</div>
@@ -47,7 +47,7 @@ export const AboutSection = () => {
           {/* Tagline */}
           <div className="text-center py-8 px-6 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-2xl border border-accent/20">
             <p className="text-2xl font-heading text-primary italic">
-              "We don't just stitch — we create <span className="text-accent">comfort</span> and <span className="text-accent">confidence</span>."
+              <b>"We don't just stitch — we create <span className="text-accent">comfort</span> and <span className="text-accent">confidence</span>."</b>
             </p>
           </div>
 

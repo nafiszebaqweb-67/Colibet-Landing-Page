@@ -91,7 +91,7 @@ export const SocialProof = () => {
           {[
             { number: "500+", label: "Happy Customers" },
             { number: "24hr", label: "Delivery Promise" },
-            { number: "5★", label: "Average Rating" },
+            { number: "4.8★", label: "Average Rating" },
             { number: "100%", label: "Quality Guaranteed" },
           ].map((stat, index) => (
             <div key={index} className="text-center animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
