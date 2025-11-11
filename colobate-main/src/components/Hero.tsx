@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Sparkles } from "lucide-react";
-import heroBackground from "@/assets/expert-suitmaker-tailoring-studio.jpg";
+import heroBackground from "@/assets/Flux_Dev_A_modern_Indian_tailor_shop_scene_showing_a_skilled_I_2.jpg";
 
 interface HeroProps {
   onStartOrder: () => void;
