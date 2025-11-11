@@ -43,10 +43,10 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         {/* Main Heading */}
         <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl text-primary-foreground mb-4 leading-tight">
           Ranchi's Fastest Custom Tailor<span className="relative inline-block">
-            <span className={`text-gradient-gold transition-opacity duration-700 ${showHindi ? 'opacity-0 absolute inset-0' : 'opacity-100'}`}>
+            <span className={`text-gradient-gold transition-opacity duration-700 leading-[1.4] ${showHindi ? 'opacity-0 absolute inset-0' : 'opacity-100'}`}>
               Designed, Stitched & Delivered
             </span>
-            <span className={`text-gradient-gold transition-opacity duration-700 ${showHindi ? 'opacity-100' : 'opacity-0 absolute inset-0'}`}>
+            <span className={`text-gradient-gold transition-opacity duration-700 leading-[1.4] ${showHindi ? 'opacity-100' : 'opacity-0 absolute inset-0'}`}>
               डिज़ाइन, सिलाई और डिलीवरी
             </span>
           </span> <br></br>in 24 Hours.
