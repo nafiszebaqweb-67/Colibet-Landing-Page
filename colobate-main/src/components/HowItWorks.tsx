@@ -39,49 +39,55 @@ export const HowItWorks = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto relative">
           {steps.map((step, index) => (
             <div 
               key={index}
-              className="relative animate-slide-up group"
+              className="relative animate-slide-up"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {/* Step Card */}
-              <div className="bg-card border border-accent/20 rounded-2xl p-8 text-center hover:shadow-2xl transition-all duration-300 hover:scale-105 h-full">
-                {/* Step Number */}
-                <div className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-accent to-yellow-400 rounded-full flex items-center justify-center text-primary font-bold text-xl shadow-lg">
-                  {step.number}
-                </div>
-
-                {/* Icon/Image */}
+              <div className="bg-card/70 backdrop-blur-sm rounded-3xl p-8 text-center shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full border border-border/10">
+                {/* Large Circular Icon Container */}
                 <div className="mb-6 flex justify-center">
-                  <div className="w-32 h-32 bg-primary/5 rounded-2xl flex items-center justify-center p-4 group-hover:bg-accent/10 transition-colors">
+                  <div className="w-36 h-36 bg-primary/50 rounded-full flex items-center justify-center shadow-md">
                     <img 
                       src={step.image} 
                       alt={step.title}
-                      className="w-full h-full object-contain"
+                      className="w-24 h-24 object-contain"
                     />
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="space-y-3">
-                  <div className="text-3xl mb-2">{step.icon}</div>
-                  <h3 className="font-heading text-xl text-primary font-bold">
+                <div className="space-y-4">
+                  <h3 className="font-heading text-2xl text-foreground font-bold tracking-tight">
                     {step.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-muted-foreground leading-relaxed text-base">
                     {step.description}
                   </p>
                 </div>
               </div>
 
-              {/* Connector Arrow (hidden on mobile, shown on desktop) */}
-              {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                  <div className="text-accent text-3xl"> ⇨</div>
+              {/* Dashed Connector Line (hidden on mobile, shown on desktop) */}
+              {/* {index < steps.length - 1 && (
+                <div className="hidden md:block absolute top-20 left-full w-12 h-0.5 z-0">
+                  <svg width="100%" height="2" className="overflow-visible">
+                    <line 
+                      x1="0" 
+                      y1="1" 
+                      x2="100%" 
+                      y2="1" 
+                      stroke="hsl(var(--primary))" 
+                      strokeWidth="2" 
+                      strokeDasharray="8,8"
+                      opacity="0.4"
+                    />
+                    <circle cx="100%" cy="1" r="5" fill="hsl(var(--primary))" opacity="0.6" />
+                  </svg>
                 </div>
-              )}
+              )} */}
             </div>
           ))}
         </div>
