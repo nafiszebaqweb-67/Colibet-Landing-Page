@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Sparkles } from "lucide-react";
 import heroBackground from "@/assets/expert-suitmaker-tailoring-studio.jpg";
@@ -7,6 +8,15 @@ interface HeroProps {
 }
 
 export const Hero = ({ onStartOrder }: HeroProps) => {
+  const [showHindi, setShowHindi] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowHindi(prev => !prev);
+    }, 3000); // Toggle every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
   const handleWhatsApp = () => {
     const message = encodeURIComponent("Hi Collibet Team, I'd like to book tailoring service in Ranchi.");
     window.open(`https://wa.me/919876543210?text=${message}`, '_blank');
@@ -14,12 +24,12 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay - 30% More Transparent */}
+      {/* Background Image with Overlay - Fade In and Out */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${heroBackground})` }}
       >
-        <div className="absolute inset-0" style={{ background: 'var(--gradient-hero-fade)' }} />
+        <div className="absolute inset-0" style={{ background: 'var(--gradient-section-blue-in)' }} />
       </div>
 
       {/* Content */}
@@ -32,7 +42,14 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
 
         {/* Main Heading */}
         <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl text-primary-foreground mb-4 leading-tight">
-          Ranchi's Fastest Custom Tailor <span className="text-gradient-gold">Designed, Stitched & Delivered</span> <br></br>In 24 Hours.
+          Ranchi's Fastest Custom Tailor<span className="relative inline-block">
+            <span className={`text-gradient-gold transition-opacity duration-700 ${showHindi ? 'opacity-0 absolute inset-0' : 'opacity-100'}`}>
+              Designed, Stitched & Delivered
+            </span>
+            <span className={`text-gradient-gold transition-opacity duration-700 ${showHindi ? 'opacity-100' : 'opacity-0 absolute inset-0'}`}>
+              डिज़ाइन, सिलाई और डिलीवरी
+            </span>
+          </span> <br></br>in 24 Hours.
         </h1>
 
         {/* Subheading */}

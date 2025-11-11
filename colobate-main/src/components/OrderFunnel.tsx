@@ -287,7 +287,7 @@ Please confirm pickup!`;
   };
 
   return (
-    <section id="order" className="py-16 bg-secondary/50">
+    <section id="order" className="py-16" style={{ background: 'var(--gradient-section-blue-out)' }}>
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           {/* Progress Indicator */}

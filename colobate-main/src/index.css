@@ -50,11 +50,13 @@ All colors MUST be HSL.
     /* Section Gradients - Blue */
     --gradient-section-blue-in: linear-gradient(180deg, hsl(200 85% 85% / 0) 0%, hsl(200 85% 75% / 0.3) 30%, hsl(200 85% 60%) 100%);
     --gradient-section-blue-out: linear-gradient(180deg, hsl(200 85% 60%) 0%, hsl(200 85% 75% / 0.3) 70%, hsl(200 85% 85% / 0) 100%);
-    
+    --gradient-section-blue-in-out: linear-gradient(180deg, hsl(200 85% 85% / 0) 0%, hsl(200 85% 70% / 0.5) 20%, hsl(200 85% 60% / 0.65) 50%, hsl(200 85% 70% / 0.5) 80%, hsl(200 85% 85% / 0) 100%);
+
     /* Section Gradients - Yellow */
     --gradient-section-yellow-in: linear-gradient(180deg, hsl(48 100% 85% / 0) 0%, hsl(48 100% 70% / 0.3) 30%, hsl(48 100% 65%) 100%);
     --gradient-section-yellow-out: linear-gradient(180deg, hsl(48 100% 65%) 0%, hsl(48 100% 70% / 0.3) 70%, hsl(48 100% 85% / 0) 100%);
-    
+    --gradient-section-yellow-in-out: linear-gradient(180deg, hsl(48 100% 85% / 0) 0%, hsl(48 100% 70% / 0.3) 20%, hsl(48 100% 65% / 0.5) 50%, hsl(48 100% 70% / 0.3) 80%, hsl(48 100% 85% / 0) 100%);
+
     /* Shadows - Professional with Two-Layer Approach */
     --shadow-elegant: 0 4px 20px -4px hsl(200 95% 50% / 0.15), 0 2px 6px -2px hsl(200 95% 50% / 0.1);
     --shadow-hover: 0 8px 30px -6px hsl(200 95% 50% / 0.25), 0 4px 10px -3px hsl(200 95% 50% / 0.15);
