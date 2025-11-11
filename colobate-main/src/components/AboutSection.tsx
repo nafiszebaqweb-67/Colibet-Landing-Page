@@ -16,7 +16,7 @@ export const AboutSection = () => {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
-              Why Choose Collibet Tailoring?
+              Why Clients Trust The Collbet Promise?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               We're not just another tailoring service — we're your partner in looking your absolute best

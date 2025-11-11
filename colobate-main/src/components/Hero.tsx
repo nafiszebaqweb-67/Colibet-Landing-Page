@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Sparkles } from "lucide-react";
-import heroBackground from "@/assets/Flux_Dev_A_modern_Indian_tailor_shop_scene_showing_a_skilled_I_2.jpg";
+import heroBackground from "@/assets/Collibate hero.jpg";
 
 interface HeroProps {
   onStartOrder: () => void;
@@ -54,7 +54,7 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
 
         {/* Subheading */}
         <p className="text-xl md:text-2xl text-primary-foreground/100 mb-3 max-w-2xl mx-auto font-medium">
-          Custom Stitching for Men & Women in Ranchi
+          Custom Stitching for Men & Women.
         </p>
         
         <p className="text-lg text-primary-foreground/90 mb-8 max-w-xl mx-auto">
@@ -69,7 +69,7 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
             onClick={onStartOrder}
             className="w-full sm:w-auto"
           >
-            Start My Custom Order
+            Book Your Fitting Slot Now
           </Button>
           
           <Button 
@@ -79,7 +79,7 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
             className="w-full sm:w-auto"
           >
             <MessageCircle className="w-5 h-5" />
-            Chat Now on WhatsApp
+            Get Design Advice
           </Button>
         </div>
 

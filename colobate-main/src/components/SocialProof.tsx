@@ -41,7 +41,7 @@ export const SocialProof = () => {
             <p className="text-accent font-semibold">⭐ Trusted in Ranchi</p>
           </div>
           <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
-            Loved by 500+ Ranchi Clients
+             Trusted by 500+ Ranchi Patrons
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Real reviews from real customers who trusted us with their perfect fit

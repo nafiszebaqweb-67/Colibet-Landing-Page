@@ -32,7 +32,7 @@ export const HowItWorks = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
-            Your Perfect Fit in 3 Simple Steps
+            Your Perfect Look in 3 Steps
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             From consultation to delivery, we make custom tailoring effortless
