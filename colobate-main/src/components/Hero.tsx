@@ -41,23 +41,23 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         </div>
 
         {/* Main Heading */}
-        <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl text-primary-foreground mb-4 leading-tight">
+        <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl text-primary-foreground mb-20 leading-tight">
           Ranchi's Fastest Custom Tailor<span className="relative inline-block">
-            <span className={`text-gradient-gold transition-opacity duration-700 leading-[1.4] ${showHindi ? 'opacity-0 absolute inset-0' : 'opacity-100'}`}>
+            <span className={`text-gradient-gold transition-opacity duration-900 leading-[1.5] ${showHindi ? 'opacity-0 absolute inset-0' : 'opacity-100'}`}>
               Designed, Stitched & Delivered
             </span>
-            <span className={`text-gradient-gold transition-opacity duration-700 leading-[1.4] ${showHindi ? 'opacity-100' : 'opacity-0 absolute inset-0'}`}>
+            <span className={`text-gradient-gold transition-opacity duration-900 leading-[1.5] ${showHindi ? 'opacity-100' : 'opacity-0 absolute inset-0'}`}>
               डिज़ाइन, सिलाई और डिलीवरी
             </span>
           </span> <br></br>in 24 Hours.
         </h1>
 
         {/* Subheading */}
-        <p className="text-xl md:text-2xl text-primary-foreground/90 mb-3 max-w-2xl mx-auto font-medium">
+        <p className="text-xl md:text-2xl text-primary-foreground/100 mb-3 max-w-2xl mx-auto font-medium">
           Custom Stitching for Men & Women in Ranchi
         </p>
         
-        <p className="text-lg text-primary-foreground/80 mb-8 max-w-xl mx-auto">
+        <p className="text-lg text-primary-foreground/90 mb-8 max-w-xl mx-auto">
           From Design → Stitch → Doorstep Delivery
         </p>
 
@@ -86,15 +86,15 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         {/* Features Quick Highlight */}
         <div className="mt-12 flex flex-wrap justify-center gap-6 text-primary-foreground/80">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-accent" />
+            <div className="w-4 h-4 rounded-full bg-accent" />
             <span className="text-sm">24-Hour Delivery</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-accent" />
+            <div className="w-4 h-4 rounded-full bg-accent" />
             <span className="text-sm">Pickup & Drop Available</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-accent" />
+            <div className="w-4 h-4 rounded-full bg-accent" />
             <span className="text-sm">Premium Quality</span>
           </div>
         </div>
