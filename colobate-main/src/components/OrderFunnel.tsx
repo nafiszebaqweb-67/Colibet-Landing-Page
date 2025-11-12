@@ -3,24 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  CheckCircle2, ChevronRight, Upload, Calendar, Phone, MapPin,
-  Video, MessageSquare, Store, FileText, Trash2
-} from "lucide-react";
+import { CheckCircle2, ChevronRight, Upload, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 interface Garment {
   name: string;
-  price: number;
   icon: string;
-}
-
-interface Fabric {
-  name: string;
-  price: number;
-  image: string;
 }
 
 interface FormData {
@@ -29,23 +19,15 @@ interface FormData {
 
   // Step 2: Garment
   garment: string;
-  garmentPrice: number;
 
   // Step 3: Fabric
-  fabricType: "own" | "store" | "video" | "";
-  selectedFabric: Fabric | null;
-  videoCallDate: string;
-  videoCallTime: string;
+  fabricType: "own" | "store" | "";
 
-  // Step 4: Design
-  designType: "upload" | "appointment" | "";
+  // Step 4: Design (optional)
   designFile: File | null;
-  appointmentType: "video" | "whatsapp" | "store" | "";
-  appointmentDate: string;
-  appointmentTime: string;
 
   // Step 5: Measurement
-  measurementType: "executive" | "video" | "chart" | "";
+  measurementType: "executive" | "chart" | "";
   measurementAddress: string;
   measurementDate: string;
   measurementTime: string;
@@ -74,46 +56,31 @@ interface GarmentsByCategory {
 
 const GARMENTS_BY_CATEGORY: GarmentsByCategory = {
   Men: [
-    { name: "Shirt", price: 799, icon: "👕" },
-    { name: "Pant", price: 999, icon: "👖" },
-    { name: "Kurta", price: 899, icon: "🧵" },
-    { name: "Blazer", price: 2499, icon: "🧥" },
+    { name: "Shirt", icon: "👕" },
+    { name: "Pant", icon: "👖" },
+    { name: "Kurta", icon: "🧵" },
+    { name: "Blazer", icon: "🧥" },
   ],
   Women: [
-    { name: "Kurti", price: 699, icon: "👗" },
-    { name: "Blouse", price: 499, icon: "✨" },
-    { name: "Lehenga", price: 1999, icon: "💃" },
-    { name: "Suit", price: 1299, icon: "👔" },
+    { name: "Kurti", icon: "👗" },
+    { name: "Blouse", icon: "✨" },
+    { name: "Lehenga", icon: "💃" },
+    { name: "Suit", icon: "👔" },
   ],
   Kids: [
-    { name: "Frock", price: 499, icon: "👧" },
-    { name: "Pant", price: 399, icon: "👖" },
-    { name: "Shirt", price: 399, icon: "👕" },
+    { name: "Frock", icon: "👧" },
+    { name: "Pant", icon: "👖" },
+    { name: "Shirt", icon: "👕" },
   ],
 };
-
-const STORE_FABRICS: Fabric[] = [
-  { name: "Cotton", price: 0, image: "🧵" },
-  { name: "Silk", price: 500, image: "✨" },
-  { name: "Linen", price: 300, image: "🌾" },
-  { name: "Wool", price: 800, image: "🧶" },
-];
 
 export const OrderFunnel = () => {
   const [currentStep, setCurrentStep] = useState<Step>(1);
   const [formData, setFormData] = useState<FormData>({
     category: "",
     garment: "",
-    garmentPrice: 0,
     fabricType: "",
-    selectedFabric: null,
-    videoCallDate: "",
-    videoCallTime: "",
-    designType: "",
     designFile: null,
-    appointmentType: "",
-    appointmentDate: "",
-    appointmentTime: "",
     measurementType: "",
     measurementAddress: "",
     measurementDate: "",
@@ -150,30 +117,15 @@ export const OrderFunnel = () => {
       case 2:
         return formData.garment !== "";
       case 3:
-        if (formData.fabricType === "video") {
-          return formData.videoCallDate !== "" && formData.videoCallTime !== "";
-        }
-        return formData.fabricType !== "";
+        // Fabric must be chosen as either 'own' or 'store'
+        return formData.fabricType === "own" || formData.fabricType === "store";
       case 4:
-        if (formData.designType === "upload") {
-          return formData.designFile !== null;
-        } else if (formData.designType === "appointment") {
-          return (
-            formData.appointmentType !== "" &&
-            formData.appointmentDate !== "" &&
-            formData.appointmentTime !== ""
-          );
-        }
-        return false;
+        // Design is optional
+        return true;
       case 5:
         if (formData.measurementType === "executive") {
           return (
             formData.measurementAddress !== "" &&
-            formData.measurementDate !== "" &&
-            formData.measurementTime !== ""
-          );
-        } else if (formData.measurementType === "video") {
-          return (
             formData.measurementDate !== "" &&
             formData.measurementTime !== ""
           );
@@ -196,44 +148,8 @@ export const OrderFunnel = () => {
     }
   };
 
-  const calculateTotalPrice = (): number => {
-    let total = formData.garmentPrice;
-    if (formData.selectedFabric) {
-      total += formData.selectedFabric.price;
-    }
-    return total;
-  };
-
   const handleConfirmOrder = () => {
-    const totalPrice = calculateTotalPrice();
-    const message = `Hi Collibet Team, I want to place a new tailoring order:
-
-*Garment Details:*
-Category: ${formData.category}
-Item: ${formData.garment} - ₹${formData.garmentPrice}
-
-*Fabric:*
-${formData.fabricType === "own" ? "Own Fabric (Will provide)" : formData.fabricType === "store" ? `Store Fabric: ${formData.selectedFabric?.name} - ₹${formData.selectedFabric?.price || 0}` : "Book Video Call"}
-
-*Design:*
-${formData.designType === "upload" ? "Design uploaded" : `Appointment: ${formData.appointmentType}`}
-
-*Measurement:*
-${formData.measurementType === "executive" ? "Executive Visit" : formData.measurementType === "video" ? "Video Call" : "Chart Uploaded"}
-
-*Contact:*
-Name: ${formData.fullName}
-WhatsApp: ${formData.whatsappNumber}
-${formData.alternateNumber ? `Alternate: ${formData.alternateNumber}` : ""}
-
-*Delivery Address:*
-${formData.fullAddress}
-${formData.landmark ? `Landmark: ${formData.landmark}` : ""}
-${formData.city}, ${formData.pincode}
-
-*Total Price: ₹${totalPrice}*
-
-Please confirm my order!`;
+    const message = `Hi Collibet Team, I want to place a new tailoring order:\n\n*Garment Details:*\n\nCategory: ${formData.category}\nItem: ${formData.garment}\n\n*Fabric:*\n\n${formData.fabricType === "own" ? "Own Fabric (Will provide)" : "Store Fabric (Select at store)"}\n\n*Design:*\n\n${formData.designFile ? "Design uploaded" : "No design provided"}\n\n*Measurement:*\n\n${formData.measurementType === "executive" ? `Executive Visit - ${formData.measurementAddress} on ${formData.measurementDate} ${formData.measurementTime}` : formData.measurementType === "chart" ? "Chart uploaded" : "Not specified"}\n\n*Contact:*\nName: ${formData.fullName}\nWhatsApp: ${formData.whatsappNumber}\n${formData.alternateNumber ? `Alternate: ${formData.alternateNumber}` : ""}\n\n*Delivery Address:*\n${formData.fullAddress}\n${formData.landmark ? `Landmark: ${formData.landmark}` : ""}\n${formData.city}, ${formData.pincode}\n\nPlease confirm my order!`;
 
     const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
@@ -258,8 +174,8 @@ Please confirm my order!`;
                 <Card
                   key={cat}
                   className={`cursor-pointer transition-all hover:shadow-lg ${formData.category === cat
-                      ? "border-accent border-2 shadow-lg"
-                      : "hover:border-accent"
+                    ? "border-accent border-2 shadow-lg"
+                    : "hover:border-accent"
                     }`}
                   onClick={() =>
                     setFormData({ ...formData, category: cat })
@@ -298,23 +214,20 @@ Please confirm my order!`;
                 <Card
                   key={garment.name}
                   className={`cursor-pointer transition-all hover:shadow-lg ${formData.garment === garment.name
-                      ? "border-accent border-2 shadow-lg"
-                      : "hover:border-accent"
+                    ? "border-accent border-2 shadow-lg"
+                    : "hover:border-accent"
                     }`}
                   onClick={() =>
                     setFormData({
                       ...formData,
                       garment: garment.name,
-                      garmentPrice: garment.price,
                     })
                   }
                 >
                   <CardContent className="p-6 text-center">
                     <div className="text-4xl mb-3">{garment.icon}</div>
                     <p className="font-semibold">{garment.name}</p>
-                    <p className="text-accent font-bold text-lg mt-2">
-                      ₹{garment.price}
-                    </p>
+                    {/* price removed per request */}
                   </CardContent>
                 </Card>
               ))}
@@ -336,8 +249,8 @@ Please confirm my order!`;
               {/* Own Fabric */}
               <Card
                 className={`cursor-pointer transition-all hover:shadow-lg ${formData.fabricType === "own"
-                    ? "border-accent border-2 shadow-lg"
-                    : "hover:border-accent"
+                  ? "border-accent border-2 shadow-lg"
+                  : "hover:border-accent"
                   }`}
                 onClick={() =>
                   setFormData({ ...formData, fabricType: "own" })
@@ -354,8 +267,8 @@ Please confirm my order!`;
               {/* Store Fabric */}
               <Card
                 className={`cursor-pointer transition-all hover:shadow-lg ${formData.fabricType === "store"
-                    ? "border-accent border-2 shadow-lg"
-                    : "hover:border-accent"
+                  ? "border-accent border-2 shadow-lg"
+                  : "hover:border-accent"
                   }`}
                 onClick={() =>
                   setFormData({ ...formData, fabricType: "store" })
@@ -364,106 +277,11 @@ Please confirm my order!`;
                 <CardContent className="p-4">
                   <p className="font-semibold">🛍️ Store Fabric</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Choose from our available fabric options
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Video Call for Fabric */}
-              <Card
-                className={`cursor-pointer transition-all hover:shadow-lg ${formData.fabricType === "video"
-                    ? "border-accent border-2 shadow-lg"
-                    : "hover:border-accent"
-                  }`}
-                onClick={() =>
-                  setFormData({ ...formData, fabricType: "video" })
-                }
-              >
-                <CardContent className="p-4">
-                  <p className="font-semibold">📹 Video Call</p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    View fabric samples via video call
+                    We'll help you select fabric at the store
                   </p>
                 </CardContent>
               </Card>
             </div>
-
-            {/* Store Fabric Selection */}
-            {formData.fabricType === "store" && (
-              <div className="mt-6 pt-6 border-t space-y-3">
-                <p className="font-semibold text-primary">
-                  Choose Fabric:
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {STORE_FABRICS.map((fabric) => (
-                    <Card
-                      key={fabric.name}
-                      className={`cursor-pointer transition-all hover:shadow-lg ${formData.selectedFabric?.name === fabric.name
-                          ? "border-accent border-2 shadow-lg"
-                          : "hover:border-accent"
-                        }`}
-                      onClick={() =>
-                        setFormData({
-                          ...formData,
-                          selectedFabric: fabric,
-                        })
-                      }
-                    >
-                      <CardContent className="p-4 text-center">
-                        <div className="text-3xl mb-2">{fabric.image}</div>
-                        <p className="font-semibold">{fabric.name}</p>
-                        {fabric.price > 0 && (
-                          <p className="text-accent font-bold mt-1">
-                            +₹{fabric.price}
-                          </p>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Video Call Booking */}
-            {formData.fabricType === "video" && (
-              <div className="mt-6 pt-6 border-t space-y-4">
-                <p className="font-semibold text-primary">
-                  Schedule Video Call:
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Date
-                    </label>
-                    <Input
-                      type="date"
-                      value={formData.videoCallDate}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          videoCallDate: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Time
-                    </label>
-                    <Input
-                      type="time"
-                      value={formData.videoCallTime}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          videoCallTime: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         );
 
@@ -472,195 +290,44 @@ Please confirm my order!`;
         return (
           <div className="space-y-4 animate-slide-up">
             <h2 className="text-2xl font-heading text-primary mb-6">
-              Upload Design or Book Appointment
+              Upload Design (optional)
             </h2>
             <p className="text-muted-foreground mb-6">
-              How would you like to provide the design?
+              You may upload a design file (optional). If you prefer, our team will help with design at the store.
             </p>
 
-            <div className="space-y-3">
-              {/* Upload Design */}
-              <Card
-                className={`cursor-pointer transition-all hover:shadow-lg ${formData.designType === "upload"
-                    ? "border-accent border-2 shadow-lg"
-                    : "hover:border-accent"
-                  }`}
-                onClick={() =>
-                  setFormData({ ...formData, designType: "upload" })
-                }
-              >
-                <CardContent className="p-4">
-                  <p className="font-semibold">📤 Upload Design</p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Upload design image or PDF
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Book Appointment */}
-              <Card
-                className={`cursor-pointer transition-all hover:shadow-lg ${formData.designType === "appointment"
-                    ? "border-accent border-2 shadow-lg"
-                    : "hover:border-accent"
-                  }`}
-                onClick={() =>
-                  setFormData({
-                    ...formData,
-                    designType: "appointment",
-                  })
-                }
-              >
-                <CardContent className="p-4">
-                  <p className="font-semibold">📅 Book Appointment</p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Discuss design with our expert
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Upload Design Section */}
-            {formData.designType === "upload" && (
-              <div className="mt-6 pt-6 border-t space-y-4">
-                <div className="border-2 border-dashed border-accent/30 rounded-lg p-6 text-center">
-                  <Upload className="w-8 h-8 text-accent mx-auto mb-2" />
-                  <input
-                    type="file"
-                    accept="image/*,.pdf"
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        designFile: e.target.files?.[0] || null,
-                      })
-                    }
-                    className="hidden"
-                    id="design-upload"
-                  />
-                  <label
-                    htmlFor="design-upload"
-                    className="cursor-pointer block"
+            <div className="mt-6 pt-6 border-t space-y-4">
+              <div className="border-2 border-dashed border-accent/30 rounded-lg p-6 text-center">
+                <Upload className="w-8 h-8 text-accent mx-auto mb-2" />
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      designFile: e.target.files?.[0] || null,
+                    })
+                  }
+                  className="hidden"
+                  id="design-upload"
+                />
+                <label htmlFor="design-upload" className="cursor-pointer block">
+                  <p className="font-medium text-primary">Click to upload</p>
+                  <p className="text-sm text-muted-foreground">or drag and drop</p>
+                  <p className="text-xs text-muted-foreground mt-2">PNG, JPG, PDF (max. 10MB)</p>
+                </label>
+              </div>
+              {formData.designFile && (
+                <div className="bg-accent/10 p-3 rounded-lg flex items-center justify-between">
+                  <span className="text-sm font-medium">{formData.designFile.name}</span>
+                  <button
+                    onClick={() => setFormData({ ...formData, designFile: null })}
                   >
-                    <p className="font-medium text-primary">
-                      Click to upload
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      or drag and drop
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      PNG, JPG, PDF (max. 10MB)
-                    </p>
-                  </label>
+                    <Trash2 className="w-4 h-4 text-red-500" />
+                  </button>
                 </div>
-                {formData.designFile && (
-                  <div className="bg-accent/10 p-3 rounded-lg flex items-center justify-between">
-                    <span className="text-sm font-medium">
-                      {formData.designFile.name}
-                    </span>
-                    <button
-                      onClick={() =>
-                        setFormData({
-                          ...formData,
-                          designFile: null,
-                        })
-                      }
-                    >
-                      <Trash2 className="w-4 h-4 text-red-500" />
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Appointment Section */}
-            {formData.designType === "appointment" && (
-              <div className="mt-6 pt-6 border-t space-y-4">
-                <p className="font-semibold text-primary mb-3">
-                  Choose Appointment Type:
-                </p>
-                <div className="space-y-3">
-                  {[
-                    {
-                      type: "video",
-                      icon: "📹",
-                      label: "Video Call",
-                    },
-                    {
-                      type: "whatsapp",
-                      icon: "💬",
-                      label: "WhatsApp Call",
-                    },
-                    {
-                      type: "store",
-                      icon: "🏪",
-                      label: "Visit Store",
-                    },
-                  ].map((apt) => (
-                    <Card
-                      key={apt.type}
-                      className={`cursor-pointer transition-all hover:shadow-lg ${formData.appointmentType === apt.type
-                          ? "border-accent border-2 shadow-lg"
-                          : "hover:border-accent"
-                        }`}
-                      onClick={() =>
-                        setFormData({
-                          ...formData,
-                          appointmentType: apt.type as
-                            | "video"
-                            | "whatsapp"
-                            | "store",
-                        })
-                      }
-                    >
-                      <CardContent className="p-4">
-                        <p className="font-semibold">
-                          {apt.icon} {apt.label}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-
-                {formData.appointmentType && (
-                  <div className="mt-4 pt-4 border-t space-y-4">
-                    <p className="font-semibold text-primary">
-                      Schedule Appointment:
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">
-                          Date
-                        </label>
-                        <Input
-                          type="date"
-                          value={formData.appointmentDate}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              appointmentDate: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">
-                          Time
-                        </label>
-                        <Input
-                          type="time"
-                          value={formData.appointmentTime}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              appointmentTime: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+              )}
+            </div>
           </div>
         );
 
@@ -679,8 +346,8 @@ Please confirm my order!`;
               {/* Executive Visit */}
               <Card
                 className={`cursor-pointer transition-all hover:shadow-lg ${formData.measurementType === "executive"
-                    ? "border-accent border-2 shadow-lg"
-                    : "hover:border-accent"
+                  ? "border-accent border-2 shadow-lg"
+                  : "hover:border-accent"
                   }`}
                 onClick={() =>
                   setFormData({
@@ -697,32 +364,13 @@ Please confirm my order!`;
                 </CardContent>
               </Card>
 
-              {/* Video Call */}
-              <Card
-                className={`cursor-pointer transition-all hover:shadow-lg ${formData.measurementType === "video"
-                    ? "border-accent border-2 shadow-lg"
-                    : "hover:border-accent"
-                  }`}
-                onClick={() =>
-                  setFormData({
-                    ...formData,
-                    measurementType: "video",
-                  })
-                }
-              >
-                <CardContent className="p-4">
-                  <p className="font-semibold">📹 Video Call</p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    We'll guide you through measuring
-                  </p>
-                </CardContent>
-              </Card>
+              {/* Video option removed per request */}
 
               {/* Upload Chart */}
               <Card
                 className={`cursor-pointer transition-all hover:shadow-lg ${formData.measurementType === "chart"
-                    ? "border-accent border-2 shadow-lg"
-                    : "hover:border-accent"
+                  ? "border-accent border-2 shadow-lg"
+                  : "hover:border-accent"
                   }`}
                 onClick={() =>
                   setFormData({
@@ -797,46 +445,7 @@ Please confirm my order!`;
               </div>
             )}
 
-            {/* Video Call */}
-            {formData.measurementType === "video" && (
-              <div className="mt-6 pt-6 border-t space-y-4">
-                <p className="font-semibold text-primary mb-3">
-                  Schedule Video Call:
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Date
-                    </label>
-                    <Input
-                      type="date"
-                      value={formData.measurementDate}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          measurementDate: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Time
-                    </label>
-                    <Input
-                      type="time"
-                      value={formData.measurementTime}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          measurementTime: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* measurement video-call removed */}
 
             {/* Upload Chart */}
             {formData.measurementType === "chart" && (
@@ -1082,7 +691,6 @@ Please confirm my order!`;
 
       // Step 8: Order Summary & Confirmation
       case 8:
-        const total = calculateTotalPrice();
         return (
           <div className="space-y-6 animate-slide-up">
             <div className="text-center space-y-4 mb-8">
@@ -1114,36 +722,8 @@ Please confirm my order!`;
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Garment Price:</span>
-                    <span className="font-medium">₹{formData.garmentPrice}</span>
-                  </div>
-
-                  {formData.selectedFabric && (
-                    <>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Fabric:</span>
-                        <span className="font-medium">
-                          {formData.selectedFabric.name}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">
-                          Fabric Price:
-                        </span>
-                        <span className="font-medium">
-                          +₹{formData.selectedFabric.price}
-                        </span>
-                      </div>
-                    </>
-                  )}
-
-                  <div className="border-t pt-3 flex justify-between">
-                    <span className="font-semibold text-primary">
-                      Total Price:
-                    </span>
-                    <span className="font-bold text-accent text-lg">
-                      ₹{total}
-                    </span>
+                    <span className="text-muted-foreground">Fabric:</span>
+                    <span className="font-medium">{formData.fabricType === "own" ? "Own Fabric" : "Store Fabric"}</span>
                   </div>
                 </div>
               </CardContent>
@@ -1214,12 +794,9 @@ Please confirm my order!`;
                   </p>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-accent">
-                    ₹{calculateTotalPrice()}
+                  <div className="text-sm text-muted-foreground">
+                    No prices shown
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Estimated Total
-                  </p>
                 </div>
               </div>
               <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -1238,10 +815,10 @@ Please confirm my order!`;
                 <div
                   key={step}
                   className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold transition-all ${step === currentStep
-                      ? "bg-accent text-accent-foreground shadow-lg scale-110"
-                      : step < currentStep
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-gray-200 dark:bg-gray-700 text-muted-foreground"
+                    ? "bg-accent text-accent-foreground shadow-lg scale-110"
+                    : step < currentStep
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-gray-200 dark:bg-gray-700 text-muted-foreground"
                     }`}
                 >
                   {step < currentStep ? "✓" : step}
@@ -1279,8 +856,8 @@ Please confirm my order!`;
                 }
                 disabled={!isStepValid()}
                 className={`flex-1 ${!isStepValid()
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
                   }`}
               >
                 {currentStep === 7 ? (
@@ -1307,16 +884,8 @@ Please confirm my order!`;
                   setFormData({
                     category: "",
                     garment: "",
-                    garmentPrice: 0,
                     fabricType: "",
-                    selectedFabric: null,
-                    videoCallDate: "",
-                    videoCallTime: "",
-                    designType: "",
                     designFile: null,
-                    appointmentType: "",
-                    appointmentDate: "",
-                    appointmentTime: "",
                     measurementType: "",
                     measurementAddress: "",
                     measurementDate: "",
