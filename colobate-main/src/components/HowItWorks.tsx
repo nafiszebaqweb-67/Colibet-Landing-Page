@@ -4,34 +4,31 @@ import step2Image from "@/assets/step-2.png";
 import step3Image from "@/assets/step-3.png";
 
 export const HowItWorks = () => {
-  const [activeStep, setActiveStep] = useState<number | null>(null);
+  const [activeStep, setActiveStep] = useState<number>(0);
 
   const steps = [
     {
       number: "1",
-      icon: "🧵",
       image: step1Image,
       title: "Choose Your Design",
       description: "Share your fabric & style preferences. We help you create the perfect look.",
     },
     {
       number: "2",
-      icon: "✂️",
       image: step2Image,
       title: "We Stitch It Custom",
       description: "Our expert tailors craft your perfect fit with precision and care.",
     },
     {
       number: "3",
-      icon: "📦",
       image: step3Image,
       title: "Delivered in 24 Hours",
       description: "Straight to your doorstep in Ranchi. Fast, reliable, premium quality.",
     },
   ];
 
-  const handleControlClick = (index: number) => {
-    setActiveStep(activeStep === index ? null : index);
+  const handleIconClick = (index: number) => {
+    setActiveStep(index);
   };
 
   return (
@@ -46,138 +43,116 @@ export const HowItWorks = () => {
           </p>
         </div>
 
-        {/* Control Buttons with Numbers */}
-        <div className="flex justify-center gap-6 animate-fade-in">
-          {steps.map((step, index) => (
-            <button
-              key={index}
-              onClick={() => handleControlClick(index)}
-              className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 ease-out font-heading text-2xl font-bold ${
-                activeStep === index
-                  ? 'bg-primary text-primary-foreground shadow-[var(--shadow-elegant)] scale-110 ring-4 ring-primary/20'
-                  : 'bg-card/80 backdrop-blur-sm shadow-md hover:shadow-xl hover:scale-110 border-2 border-border/30 text-foreground hover:border-primary/40'
-              }`}
-              aria-label={`View ${step.title}`}
-            >
-              {step.number}
-            </button>
-          ))}
-        </div>
-
-        {/* Cards Container */}
-        <div className="max-w-6xl mx-auto mt-10 relative min-h-[450px]">
-          {steps.map((step, index) => {
-            // Determine position classes based on active state
-            let positionClasses = '';
-            let transformClasses = '';
+        {/* Main Layout - Matching Reference Structure */}
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 items-start justify-between">
             
-            if (activeStep === null) {
-              // All cards stacked in center initially
-              positionClasses = 'left-1/2 -translate-x-1/2';
-            } else if (activeStep === index) {
-              // Active card positions
-              if (index === 0) {
-                positionClasses = 'left-0 md:left-[3%]';
-                transformClasses = 'translate-x-0';
-              } else if (index === 1) {
-                positionClasses = 'left-1/2 -translate-x-1/2';
-                transformClasses = 'rotateY(0deg)';
-              } else {
-                positionClasses = 'right-0 md:right-[3%]';
-                transformClasses = 'translate-x-0';
-              }
-            } else {
-              // Inactive cards return to center
-              positionClasses = 'left-1/2 -translate-x-1/2';
-            }
-
-            return (
-              <div 
-                key={index}
-                className={`absolute top-0 w-full md:w-[30%] transition-all duration-700 ease-out ${positionClasses}`}
-                style={{
-                  transform: activeStep === index && index === 1 ? 'translateX(-50%) rotateY(0deg)' : undefined,
-                  transformStyle: index === 1 ? 'preserve-3d' : undefined,
-                  perspective: index === 1 ? '1000px' : undefined,
-                  zIndex: activeStep === index ? 10 : 1,
-                }}
-              >
-                {/* Minimized State */}
-                <div 
-                  className={`transition-all duration-700 ease-out ${
-                    activeStep === index 
-                      ? 'opacity-0 scale-75 pointer-events-none' 
-                      : 'opacity-100 scale-100'
-                  }`}
-                  style={{
-                    transform: activeStep === null && index === 1 ? 'rotateY(180deg)' : undefined,
-                  }}
-                >
-                  <div className="bg-card/60 backdrop-blur-sm rounded-3xl p-6 text-center shadow-md border border-border/10 flex items-center justify-center h-[120px]">
-                    <div className="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center shadow-md">
+            {/* Left Side: Icons, Timeline & Content (Vertical Stack) */}
+            <div className="w-full lg:w-[65%] flex flex-col items-center">
+              
+              {/* Clickable Icon Blobs Row */}
+              <div className="flex justify-center items-center gap-16 mb-10 w-full max-w-md">
+                {steps.map((step, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleIconClick(index)}
+                    className={`relative flex-shrink-0 transition-all duration-500 ease-out hover:scale-105 focus:outline-none ${
+                      activeStep === index ? 'scale-110' : 'scale-100'
+                    }`}
+                    aria-label={`View ${step.title}`}
+                    style={{
+                      width: '110px',
+                      height: '110px',
+                    }}
+                  >
+                    <div
+                      className={`w-full h-full flex items-center justify-center transition-all duration-500 ${
+                        activeStep === index
+                          ? 'bg-primary shadow-[0_10px_40px_rgba(0,180,220,0.35)]'
+                          : 'bg-muted/50 shadow-md hover:shadow-lg'
+                      }`}
+                      style={{
+                        borderRadius: index === 0 
+                          ? '50% 50% 50% 50% / 60% 60% 40% 40%'
+                          : index === 1
+                          ? '60% 40% 50% 50% / 50% 60% 40% 50%'
+                          : '50% 50% 60% 40% / 50% 50% 50% 50%',
+                      }}
+                    >
                       <img 
                         src={step.image} 
                         alt={step.title}
-                        className="w-10 h-10 object-contain opacity-40"
+                        className={`w-16 h-16 object-contain transition-all duration-500 ${
+                          activeStep === index ? 'brightness-0 invert scale-110' : 'opacity-60'
+                        }`}
                       />
                     </div>
+                  </button>
+                ))}
+              </div>
+
+              {/* Timeline with Number Circle on Left */}
+              <div className="flex items-center gap-6 mb-10 w-full max-w-md">
+                {/* Large Number Circle - Fixed on Left */}
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 sm:w-15 sm:h-15 rounded-full bg-primary flex items-center justify-center shadow-[0_8px_30px_rgba(0,180,220,0.4)] ring-4 ring-primary/10 transition-all duration-500">
+                    <span className="text-white font-heading text-2xl sm:text-3xl font-bold">
+                      {activeStep + 1}
+                    </span>
                   </div>
                 </div>
 
-                {/* Expanded State */}
-                <div 
-                  className={`absolute inset-0 transition-all duration-700 ease-out ${
-                    activeStep === index 
-                      ? 'opacity-100 scale-100 pointer-events-auto' 
-                      : 'opacity-0 scale-90 pointer-events-none'
-                  }`}
-                  style={{
-                    transform: activeStep !== index && index === 1 ? 'rotateY(180deg)' : undefined,
-                    backfaceVisibility: index === 1 ? 'hidden' : undefined,
-                  }}
-                >
-                  <div className="bg-card backdrop-blur-sm rounded-3xl p-8 text-center shadow-xl border border-primary/20 flex flex-col items-center justify-center min-h-[400px]">
-                    <div className="mb-6 flex justify-center">
-                      <div className="w-36 h-36 bg-primary/5 rounded-full flex items-center justify-center shadow-md">
-                        <img 
-                          src={step.image} 
-                          alt={step.title}
-                          className="w-20 h-20 object-contain"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-4">
-                      <h3 className="font-heading text-2xl text-foreground font-bold tracking-tight">
-                        {step.title}
-                      </h3>
-                      <p className="text-muted-foreground leading-relaxed text-base">
-                        {step.description}
-                      </p>
-                    </div>
+                {/* Timeline Line with Dots */}
+                <div className="relative flex-1 h-1">
+                  <div className="absolute inset-0 bg-primary/20 rounded-full" />
+                  <div 
+                    className="absolute top-0 left-0 h-full bg-primary rounded-full transition-all duration-700 ease-in-out"
+                    style={{
+                      width: `${(activeStep / (steps.length - 1)) * 100}%`,
+                    }}
+                  />
+                  <div className="absolute inset-0 flex justify-between items-center px-0">
+                    {steps.map((_, index) => (
+                      <div
+                        key={index}
+                        className={`w-4 h-4 rounded-full transition-all duration-500 ${
+                          index <= activeStep ? 'bg-primary scale-125 shadow-md' : 'bg-primary/30'
+                        }`}
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
-            );
-          })}
-        </div>
 
-        {/* Control Buttons with Numbers */}
-        {/* <div className="flex justify-center gap-6 animate-fade-in">
-          {steps.map((step, index) => (
-            <button
-              key={index}
-              onClick={() => handleControlClick(index)}
-              className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 ease-out font-heading text-2xl font-bold ${
-                activeStep === index
-                  ? 'bg-primary text-primary-foreground shadow-[var(--shadow-elegant)] scale-110 ring-4 ring-primary/20'
-                  : 'bg-card/80 backdrop-blur-sm shadow-md hover:shadow-xl hover:scale-110 border-2 border-border/30 text-foreground hover:border-primary/40'
-              }`}
-              aria-label={`View ${step.title}`}
-            >
-              {step.number}
-            </button>
-          ))}
-        </div> */}
+              {/* Content Text Below Timeline */}
+              <div className="space-y-3 w-full max-w-md">
+                <h3 className="font-heading text-3xl sm:text-4xl text-foreground font-bold tracking-tight leading-tight transition-all duration-500">
+                  {steps[activeStep].title}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed text-white/90 text-base sm:text-lg transition-all duration-500">
+                  {steps[activeStep].description}
+                </p>
+              </div>
+            </div>
+
+            {/* Right Side: Large Circular Icon Badge */}
+            <div className="w-full lg:w-[40%] flex justify-center lg:justify-start">
+              <div 
+                className="w-72 h-72 sm:w-80 sm:h-80 lg:w-[22rem] lg:h-[22rem] bg-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 ease-out"
+                key={activeStep}
+              >
+                <div className="w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center">
+                  <img 
+                    src={steps[activeStep].image} 
+                    alt={steps[activeStep].title}
+                    className="w-full h-full object-contain animate-fade-in"
+                  />
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
     </section>
   );
