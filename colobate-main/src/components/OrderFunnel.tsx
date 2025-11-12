@@ -6,6 +6,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, ChevronRight, Upload, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+// Import category images
+import menImage from "@/assets/men-category.jpg";
+import womenImage from "@/assets/women-category.jpg";
+import kidsImage from "@/assets/kids-category.jpg";
+
 type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 interface Garment {
@@ -161,6 +166,11 @@ export const OrderFunnel = () => {
     switch (currentStep) {
       // Step 1: Category Selection
       case 1:
+        const categoryImages = {
+          Men: menImage,
+          Women: womenImage,
+          Kids: kidsImage,
+        };
         return (
           <div className="space-y-4 animate-slide-up">
             <h2 className="text-2xl font-heading text-primary mb-6">
@@ -173,7 +183,7 @@ export const OrderFunnel = () => {
               {(["Men", "Women", "Kids"] as const).map((cat) => (
                 <Card
                   key={cat}
-                  className={`cursor-pointer transition-all hover:shadow-lg ${formData.category === cat
+                  className={`cursor-pointer transition-all hover:shadow-lg overflow-hidden ${formData.category === cat
                     ? "border-accent border-2 shadow-lg"
                     : "hover:border-accent"
                     }`}
@@ -181,15 +191,15 @@ export const OrderFunnel = () => {
                     setFormData({ ...formData, category: cat })
                   }
                 >
-                  <CardContent className="p-8 text-center">
-                    <div className="text-5xl mb-4">
-                      {cat === "Men"
-                        ? "👔"
-                        : cat === "Women"
-                          ? "👗"
-                          : "👧"}
+                  <CardContent className="p-0 text-center">
+                    <img
+                      src={categoryImages[cat as keyof typeof categoryImages]}
+                      alt={`${cat} category`}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-4">
+                      <p className="font-semibold text-lg">{cat}</p>
                     </div>
-                    <p className="font-semibold text-lg">{cat}</p>
                   </CardContent>
                 </Card>
               ))}
