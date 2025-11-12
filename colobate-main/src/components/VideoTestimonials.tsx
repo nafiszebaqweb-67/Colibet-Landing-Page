@@ -45,7 +45,7 @@ export const VideoTestimonials = () => {
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-fade-in">
-          <div className="inline-block bg-accent/10 rounded-full px-6 py-2 mb-4">
+          <div className="inline-block backdrop-blur-sm border border-accent/30 bg-accent/10 rounded-full px-6 py-2 mb-4">
             <p className="text-accent font-semibold">📹 Video Testimonials</p>
           </div>
           <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">

@@ -126,7 +126,7 @@ export const HowItWorks = () => {
 
               {/* Content Text Below Timeline */}
               <div className="space-y-3 w-full max-w-md">
-                <h3 className="font-heading text-3xl sm:text-4xl text-foreground font-bold tracking-tight leading-tight transition-all duration-500">
+                <h3 className="font-heading text-3xl sm:text-4xl text-white text-foreground font-bold tracking-tight leading-tight transition-all duration-500">
                   {steps[activeStep].title}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed text-white/90 text-base sm:text-lg transition-all duration-500">
