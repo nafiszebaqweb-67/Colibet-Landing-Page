@@ -198,7 +198,7 @@ export const OrderFunnel = () => {
         );
 
       // Step 2: Garment Selection
-      case 2:
+      case 2: {
         const garments =
           GARMENTS_BY_CATEGORY[formData.category as keyof typeof GARMENTS_BY_CATEGORY] || [];
         return (
@@ -234,6 +234,7 @@ export const OrderFunnel = () => {
             </div>
           </div>
         );
+      }
 
       // Step 3: Fabric Selection
       case 3:
