@@ -11,11 +11,23 @@ import menImage from "@/assets/men-category.jpg";
 import womenImage from "@/assets/women-category.jpg";
 import kidsImage from "@/assets/kids-category.jpg";
 
+// Import garment images
+import shirtImage from "@/assets/shirt-garment.jpg";
+import pantImage from "@/assets/pant-garment.jpg";
+import kurtaImage from "@/assets/kurta-garment.jpg";
+import blazerImage from "@/assets/blazer-garment.jpg";
+import kurtiImage from "@/assets/kurti-garment.jpg";
+import blouseImage from "@/assets/blouse-garment.jpg";
+import lehengaImage from "@/assets/lehenga-garment.jpg";
+import suitImage from "@/assets/suit-garment.jpg";
+import frockImage from "@/assets/frock-garment.jpg";
+
 type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 interface Garment {
   name: string;
   icon: string;
+  image: string;
 }
 
 interface FormData {
@@ -61,21 +73,21 @@ interface GarmentsByCategory {
 
 const GARMENTS_BY_CATEGORY: GarmentsByCategory = {
   Men: [
-    { name: "Shirt", icon: "👕" },
-    { name: "Pant", icon: "👖" },
-    { name: "Kurta", icon: "🧵" },
-    { name: "Blazer", icon: "🧥" },
+    { name: "Shirt", icon: "👕", image: shirtImage },
+    { name: "Pant", icon: "👖", image: pantImage },
+    { name: "Kurta", icon: "🧵", image: kurtaImage },
+    { name: "Blazer", icon: "🧥", image: blazerImage },
   ],
   Women: [
-    { name: "Kurti", icon: "👗" },
-    { name: "Blouse", icon: "✨" },
-    { name: "Lehenga", icon: "💃" },
-    { name: "Suit", icon: "👔" },
+    { name: "Kurti", icon: "👗", image: kurtiImage },
+    { name: "Blouse", icon: "✨", image: blouseImage },
+    { name: "Lehenga", icon: "💃", image: lehengaImage },
+    { name: "Suit", icon: "👔", image: suitImage },
   ],
   Kids: [
-    { name: "Frock", icon: "👧" },
-    { name: "Pant", icon: "👖" },
-    { name: "Shirt", icon: "👕" },
+    { name: "Frock", icon: "👧", image: frockImage },
+    { name: "Pant", icon: "👖", image: pantImage },
+    { name: "Shirt", icon: "👕", image: shirtImage },
   ],
 };
 
@@ -223,7 +235,7 @@ export const OrderFunnel = () => {
               {garments.map((garment) => (
                 <Card
                   key={garment.name}
-                  className={`cursor-pointer transition-all hover:shadow-lg ${formData.garment === garment.name
+                  className={`cursor-pointer transition-all hover:shadow-lg overflow-hidden ${formData.garment === garment.name
                     ? "border-accent border-2 shadow-lg"
                     : "hover:border-accent"
                     }`}
@@ -234,10 +246,15 @@ export const OrderFunnel = () => {
                     })
                   }
                 >
-                  <CardContent className="p-6 text-center">
-                    <div className="text-4xl mb-3">{garment.icon}</div>
-                    <p className="font-semibold">{garment.name}</p>
-                    {/* price removed per request */}
+                  <CardContent className="p-0 text-center">
+                    <img
+                      src={garment.image}
+                      alt={`${garment.name} garment`}
+                      className="w-full h-24 object-cover"
+                    />
+                    <div className="p-2">
+                      <p className="font-semibold text-sm">{garment.name}</p>
+                    </div>
                   </CardContent>
                 </Card>
               ))}

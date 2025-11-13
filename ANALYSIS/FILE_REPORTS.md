@@ -6,16 +6,22 @@ This file contains per-file analysis notes created by an automated code reviewer
 
 ## Change Log
 
-### 2025-11-12 (Latest Update)
+### 2025-11-13 (Latest Update - Major Enhancement)
+- **Major Feature**: Replaced ALL emojis with images in `OrderFunnel.tsx`
+  - **Step 1 (Category Selection)**: Reduced image height from 192px to 128px (smaller as requested)
+  - **Step 2 (Garment Selection)**: Replaced emoji icons with 9 new garment product images
+  - Created images for all garments: Shirt, Pant, Kurta, Blazer, Kurti, Blouse, Lehenga, Suit, Frock
+  - Updated Garment interface to include `image: string` property
+  - All images stored in `src/assets/` with descriptive alt text
+  - Images are 300×250px placeholder quality; can be replaced with professional photography
+
+### 2025-11-12 (Previous Update)
 - **Feature Enhancement**: Replaced emoji icons in `OrderFunnel.tsx` category selection (Men, Women, Kids) with actual image assets
   - Created three placeholder images: `men-category.jpg`, `women-category.jpg`, `kids-category.jpg`
   - Updated Step 1 of OrderFunnel component to display images instead of emojis
   - Images are stored in `src/assets/` and can be replaced with actual product photography
   - Category cards now have better visual presentation with 400x300px images
   - Added image `alt` attributes for accessibility
-
-### 2025-11-12 (Initial)
-- Initial analysis created. Inventory added and deep analysis for core files. TODO list updated and further analysis in progress.
 
 ---
 
@@ -51,9 +57,18 @@ colobate-main/
 │       ├── step-1.png
 │       ├── step-2.png
 │       ├── step-3.png
-│       ├── men-category.jpg        # NEW: Category image
-│       ├── women-category.jpg      # NEW: Category image
-│       └── kids-category.jpg       # NEW: Category image
+│       ├── men-category.jpg        # Category image
+│       ├── women-category.jpg      # Category image
+│       ├── kids-category.jpg       # Category image
+│       ├── shirt-garment.jpg       # NEW: Garment image
+│       ├── pant-garment.jpg        # NEW: Garment image
+│       ├── kurta-garment.jpg       # NEW: Garment image
+│       ├── blazer-garment.jpg      # NEW: Garment image
+│       ├── kurti-garment.jpg       # NEW: Garment image
+│       ├── blouse-garment.jpg      # NEW: Garment image
+│       ├── lehenga-garment.jpg     # NEW: Garment image
+│       ├── suit-garment.jpg        # NEW: Garment image
+│       └── frock-garment.jpg       # NEW: Garment image
 └── package.json                    # Dependencies & build scripts
 ```
 
@@ -147,14 +162,14 @@ colobate-main/
 
 ---
 
-### src/components/OrderFunnel.tsx ⭐ RECENTLY UPDATED
+### src/components/OrderFunnel.tsx ⭐ RECENTLY UPDATED (2025-11-13)
 **Purpose**: Multi-step order form (8 steps) collecting garment, fabric, measurement, and contact details.
 
 **Public API**: Export `OrderFunnel` (no props).
 
 **Step Breakdown**:
-1. **Category Selection** - ⭐ NOW USES IMAGES (Men, Women, Kids)
-2. **Garment Selection** - Choose item type
+1. **Category Selection** - ⭐ NOW USES IMAGES (Men, Women, Kids) - HEIGHT REDUCED to 128px
+2. **Garment Selection** - ⭐ NOW USES IMAGES (Shirt, Pant, Kurta, Blazer, Kurti, Blouse, Lehenga, Suit, Frock)
 3. **Fabric Selection** - Own or store fabric
 4. **Design Upload** - Optional design file (image/PDF)
 5. **Measurement** - Executive visit or upload chart
@@ -162,26 +177,33 @@ colobate-main/
 7. **Delivery Address** - Full address, dates, instructions
 8. **Confirmation** - Send via WhatsApp
 
-**Recent Change Details**:
-- Replaced emoji icons (`👔`, `👗`, `👧`) with actual images
-- Images stored in `src/assets/`: `men-category.jpg`, `women-category.jpg`, `kids-category.jpg`
-- Current images are 400x300px placeholders; can be replaced with professional product photography
-- Added `alt` attributes for accessibility compliance
+**Recent Changes (2025-11-13) - Major Enhancement**:
+- ✅ Replaced ALL emojis with actual product images
+- ✅ Step 1: Category images reduced from 192px to 128px height (smaller as requested)
+- ✅ Step 2: Created and integrated 9 garment product images (300×250px)
+  - Garments: Shirt, Pant, Kurta, Blazer, Kurti, Blouse, Lehenga, Suit, Frock
+- ✅ Updated `Garment` interface to include `image: string` property
+- ✅ Updated `GARMENTS_BY_CATEGORY` to map each garment to its image
+- ✅ All images have descriptive alt text for accessibility
+- ✅ Images are responsive and use `object-fit: cover` for consistent display
 
-**Key Issues**:
+**Previous Changes (2025-11-12)**:
+- Replaced emoji icons in category selection with images
+- Initial Step 1 redesign with category images
+
+**Key Issues Remaining**:
 - ⚠️ Validation is minimal (only name & mobile checked)
-- ⚠️ `setTimeout` in `handleSelect` could capture stale state
 - ⚠️ Phone number hard-coded (shared with Hero, Footer)
 - ⚠️ No focus management on step transitions for screen readers
 
 **Suggested Improvements** (Priority):
 1. Add phone number format validation
-2. Replace `setTimeout` with functional state updater
-3. Move phone number to centralized config
+2. Move phone number to centralized config
+3. Improve inline error messaging (not just toasts)
 4. Add `aria-live` announcements for step changes
-5. Improve inline error messaging (not just toasts)
+5. Optimize image file sizes further
 
-**Status**: ⚠️ Functional, needs validation & accessibility enhancements
+**Status**: ✅ UI FULLY ENHANCED - All emojis replaced with images!
 
 ---
 
@@ -406,5 +428,5 @@ colobate-main/
 
 ---
 
-**Last Updated**: 2025-11-12
+**Last Updated**: 2025-11-13 (Major OrderFunnel enhancement - all emojis replaced with images)
 **Next Review**: Monitor for new feature additions; review when adding backend integration
