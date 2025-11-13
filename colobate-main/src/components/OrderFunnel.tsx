@@ -821,11 +821,11 @@ export const OrderFunnel = () => {
                     {Math.round((currentStep / 7) * 100)}% Complete
                   </p>
                 </div>
-                <div className="text-right">
+                {/* <div className="text-right">
                   <div className="text-sm text-muted-foreground">
                     No prices shown
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                 <div
