@@ -1,5 +1,4 @@
 // Simple mock API using localStorage to persist demo data
-import { v4 as uuidv4 } from "uuid";
 
 const ORDERS_KEY = "mock_orders";
 const USERS_KEY = "mock_users";
@@ -14,11 +13,11 @@ const seedIfEmpty = (key: string, seed: any[]) => {
 
 // Seed data
 seedIfEmpty(ORDERS_KEY, [
-  { id: "ORD1001", customer: "Rajesh Kumar", phone: "9876543210", garment: "Formal Shirt", category: "Men", status: "delivered", amount: 2500, date: "2024-11-10" },
-  { id: "ORD1002", customer: "Priya Singh", phone: "9876543211", garment: "Saree Blouse", category: "Women", status: "stitching", amount: 1500, date: "2024-11-12" },
-  { id: "ORD1003", customer: "Amit Verma", phone: "9876543212", garment: "Pant", category: "Men", status: "processing", amount: 1200, date: "2024-11-13" },
-  { id: "ORD1004", customer: "Neha Gupta", phone: "9876543213", garment: "Lehenga", category: "Women", status: "measurement", amount: 5000, date: "2024-11-14" },
-  { id: "ORD1005", customer: "Vikram Singh", phone: "9876543214", garment: "Blazer", category: "Men", status: "pending", amount: 3500, date: "2024-11-14" },
+  { id: "ORD1001", customer: "Rajesh Kumar", phone: "9876543210", garment: "Formal Shirt", category: "Men", status: "completed", amount: 2500, date: "2024-11-10" },
+  { id: "ORD1002", customer: "Priya Singh", phone: "9876543211", garment: "Saree Blouse", category: "Women", status: "progress", amount: 1500, date: "2024-11-12" },
+  { id: "ORD1003", customer: "Amit Verma", phone: "9876543212", garment: "Pant", category: "Men", status: "progress", amount: 1200, date: "2024-11-13" },
+  { id: "ORD1004", customer: "Neha Gupta", phone: "9876543213", garment: "Lehenga", category: "Women", status: "new", amount: 5000, date: "2024-11-14" },
+  { id: "ORD1005", customer: "Vikram Singh", phone: "9876543214", garment: "Blazer", category: "Men", status: "new", amount: 3500, date: "2024-11-14" },
 ]);
 
 seedIfEmpty(USERS_KEY, [

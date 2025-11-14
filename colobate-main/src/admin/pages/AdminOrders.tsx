@@ -11,33 +11,38 @@ interface Order {
   phone: string;
   garment: string;
   category: string;
-  status: "pending" | "measurement" | "stitching" | "processing" | "delivered" | "cancelled";
+  status: "new" | "progress" | "completed" | "cancelled";
   amount: number;
   date: string;
 }
 
 export const AdminOrders = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [tab, setTab] = useState<"new" | "progress" | "completed" | "cancelled" | "all">("all");
 
-  const { data: orders = [], isLoading } = useOrders();
+  const { data: orders = [], isLoading, update } = useOrders();
+
+  console.log("📊 AdminOrders - data received:", orders);
+  console.log("📊 AdminOrders - isLoading:", isLoading);
+  console.log("📊 AdminOrders - current tab:", tab);
 
   const statusColors: Record<Order["status"], string> = {
-    pending: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
-    measurement: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-    stitching: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
-    processing: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-    delivered: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+    new: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+    progress: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+    completed: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
     cancelled: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
   };
 
   const ordersList = (orders as any[]) || [];
   const filteredOrders = ordersList.filter((order: any) => {
     const matchesSearch = (order.customer || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (order.id || "").toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === "all" || order.status === filterStatus;
-    return matchesSearch && matchesStatus;
+      (String(order.id) || "").toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesTab = tab === "all" || order.status === tab;
+    return matchesSearch && matchesTab;
   });
+
+  console.log("📊 AdminOrders - ordersList:", ordersList);
+  console.log("📊 AdminOrders - filteredOrders:", filteredOrders);
 
   return (
     <div className="space-y-6">
@@ -65,25 +70,6 @@ export const AdminOrders = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex gap-2">
-              <div>
-                <label htmlFor="status-filter" className="sr-only">Filter by status</label>
-                <select
-                  id="status-filter"
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-600"
-                >
-                  <option value="all">All Status</option>
-                  <option value="pending">Pending</option>
-                  <option value="measurement">Measurement</option>
-                  <option value="stitching">Stitching</option>
-                  <option value="processing">Processing</option>
-                  <option value="delivered">Delivered</option>
-                  <option value="cancelled">Cancelled</option>
-                </select>
-              </div>
-            </div>
           </div>
         </CardContent>
       </Card>
@@ -97,58 +83,110 @@ export const AdminOrders = () => {
           {isLoading ? (
             <div className="p-6">Loading orders...</div>
           ) : (
-            <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 dark:bg-gray-800/50">
-                <tr>
-                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Order ID</th>
-                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Customer</th>
-                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Garment</th>
-                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Category</th>
-                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Status</th>
-                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Amount</th>
-                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Date</th>
-                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredOrders.map((order) => (
-                  <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
-                    <td className="px-4 py-3 font-semibold text-primary">{order.id}</td>
-                    <td className="px-4 py-3">
-                      <div>
-                        <p className="font-medium">{order.customer}</p>
-                        <p className="text-xs text-muted-foreground">{order.phone}</p>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">{order.garment}</td>
-                    <td className="px-4 py-3">{order.category}</td>
-                    <td className="px-4 py-3">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusColors[order.status]}`}>
-                        {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 font-semibold text-accent">₹{order.amount}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{order.date}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <Edit2 className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-500 hover:text-red-700">
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
+            <div className="space-y-4">
+              {/* Tabs for order status */}
+              <div className="flex flex-wrap gap-2 border-b border-gray-200 dark:border-gray-700">
+                {[
+                  { key: "new", label: "New Orders" },
+                  { key: "progress", label: "Order Progress" },
+                  { key: "completed", label: "Order Completed" },
+                  { key: "cancelled", label: "Order Cancelled" },
+                  { key: "all", label: "All Orders" },
+                ].map((t) => (
+                  <button
+                    key={t.key}
+                    onClick={() => setTab(t.key as any)}
+                    className={`px-4 py-2 font-medium border-b-2 transition-colors ${
+                      tab === t.key
+                        ? "border-primary text-primary"
+                        : "border-transparent text-muted-foreground hover:text-foreground"
+                    }`}>
+                    {t.label}
+                  </button>
                 ))}
-                </tbody>
-              </table>
               </div>
-            )}
+
+              {/* Orders Table */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 dark:bg-gray-800/50">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Order ID</th>
+                      <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Customer</th>
+                      <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Garment</th>
+                      <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Category</th>
+                      <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Status</th>
+                      <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Date</th>
+                      <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {filteredOrders.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
+                          No orders found
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredOrders.map((order) => (
+                        <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+                          <td className="px-4 py-3 font-semibold text-primary">{order.id}</td>
+                          <td className="px-4 py-3">
+                            <div>
+                              <p className="font-medium">{order.customer || "N/A"}</p>
+                              <p className="text-xs text-muted-foreground">{order.phone || "N/A"}</p>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3">{order.garment || "N/A"}</td>
+                          <td className="px-4 py-3">{order.category || "N/A"}</td>
+                          <td className="px-4 py-3">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                statusColors[order.status as Order["status"]]
+                              }`}>
+                              {String(order.status || "new").charAt(0).toUpperCase() + String(order.status || "new").slice(1)}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-muted-foreground">{order.date || "N/A"}</td>
+                          <td className="px-4 py-3">
+                            <div className="flex gap-1 flex-wrap">
+                              {order.status !== "progress" && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-xs"
+                                  onClick={() => (update as any).mutate({ id: order.id, patch: { status: "progress" } })}>
+                                  Move to Progress
+                                </Button>
+                              )}
+                              {order.status !== "completed" && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-xs"
+                                  onClick={() => (update as any).mutate({ id: order.id, patch: { status: "completed" } })}>
+                                  Mark Completed
+                                </Button>
+                              )}
+                              {order.status !== "cancelled" && (
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  className="text-xs"
+                                  onClick={() => (update as any).mutate({ id: order.id, patch: { status: "cancelled" } })}>
+                                  Cancel
+                                </Button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
