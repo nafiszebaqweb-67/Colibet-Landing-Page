@@ -3,6 +3,8 @@ import express from "express";
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 import cors from "cors";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 // Load environment variables
 dotenv.config();
@@ -28,6 +30,9 @@ const pool = mysql.createPool({
     connectionLimit: 10,
     queueLimit: 0,
 });
+
+// JWT secret for admin auth
+const JWT_SECRET = process.env.ADMIN_JWT_SECRET || "dev_admin_secret";
 
 // Simple test route (async/await)
 app.get("/test-db", async (req, res) => {
@@ -141,6 +146,67 @@ app.post("/api/orders", async (req, res) => {
         return res.status(500).json({ error: err?.message || String(err) });
     } finally {
         conn.release();
+    }
+});
+
+// --- Admin authentication and dashboard endpoints ---
+
+// Simple admin login: returns JWT on success
+app.post("/api/admin/login", async (req, res) => {
+    const { username, password } = req.body || {};
+    if (!username || !password) return res.status(400).json({ error: "username and password required" });
+
+    try {
+        const [rows] = await pool.query("SELECT id, password_hash, role FROM admins WHERE username = ? LIMIT 1", [username]);
+        if (!Array.isArray(rows) || rows.length === 0) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        const admin = rows[0];
+        // Helpful debug info (no plain password printed): show id, hash prefix and length
+        console.log("Admin login attempt:", { username, id: admin.id, hashPrefix: (admin.password_hash || "").slice(0, 4), hashLen: (admin.password_hash || "").length });
+        // bcryptjs provides a synchronous compare helper which is reliable cross-platform
+        const match = bcrypt.compareSync(password, admin.password_hash);
+        console.log("bcrypt compare result:", match);
+        if (!match) return res.status(401).json({ error: "Invalid credentials" });
+
+        const token = jwt.sign({ adminId: admin.id, username, role: admin.role }, JWT_SECRET, { expiresIn: "8h" });
+        return res.json({ token });
+    } catch (err) {
+        console.error("❌ Admin login error:", err);
+        return res.status(500).json({ error: err?.message || String(err) });
+    }
+});
+
+// Middleware to protect admin routes
+function authenticateAdmin(req, res, next) {
+    const auth = req.headers.authorization;
+    if (!auth || !auth.startsWith("Bearer ")) return res.status(401).json({ error: "Missing token" });
+    const token = auth.slice(7);
+    try {
+        const payload = jwt.verify(token, JWT_SECRET);
+        // attach payload for handlers
+        req.admin = payload;
+        return next();
+    } catch (err) {
+        return res.status(401).json({ error: "Invalid token" });
+    }
+}
+
+// Example protected route: get recent orders for admin dashboard
+app.get("/api/admin/orders", authenticateAdmin, async (req, res) => {
+    try {
+        const [rows] = await pool.query(
+            `SELECT o.*, c.name AS customer_name, c.whatsapp_number
+             FROM orders o
+             LEFT JOIN customers c ON o.customer_id = c.id
+             ORDER BY o.created_at DESC
+             LIMIT 500`
+        );
+        return res.json({ orders: rows });
+    } catch (err) {
+        console.error("❌ Failed to fetch orders for admin:", err);
+        return res.status(500).json({ error: err?.message || String(err) });
     }
 });
 

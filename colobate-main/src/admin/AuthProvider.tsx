@@ -27,15 +27,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [isAuthenticated]);
 
   const login = async (username: string, password: string) => {
-    // Demo credentials: admin / password123
-    if (username === "admin" && password === "password123") {
-      localStorage.setItem(AUTH_KEY, "demo-token");
+    try {
+      const res = await fetch("http://localhost:5000/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const text = await res.text();
+      let data: any = null;
+      try {
+        data = text ? JSON.parse(text) : null;
+      } catch (e) {
+        // ignore
+      }
+
+      if (!res.ok) {
+        console.error("Admin login failed:", res.status, text);
+        return false;
+      }
+
+      const token = data?.token;
+      if (!token) return false;
+
+      localStorage.setItem(AUTH_KEY, token);
       localStorage.setItem("collibet_admin_user", JSON.stringify({ username }));
       setUser({ username });
       setIsAuthenticated(true);
       return true;
+    } catch (err) {
+      console.error("Admin login error:", err);
+      return false;
     }
-    return false;
   };
 
   const logout = () => {

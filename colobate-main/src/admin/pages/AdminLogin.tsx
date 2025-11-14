@@ -18,7 +18,7 @@ export const AdminLogin = () => {
     if (ok) {
       navigate("/admin");
     } else {
-      setError("Invalid credentials. Use admin / password123 for demo.");
+      setError("Invalid credentials. Please check your username and password.");
     }
   };
 
