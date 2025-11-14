@@ -47,13 +47,12 @@ interface FormData {
   measurementType: "executive" | "chart" | "";
   measurementAddress: string;
   measurementDate: string;
-  measurementTime: string;
   measurementChart: File | null;
 
   // Step 6: Contact Info
   fullName: string;
   whatsappNumber: string;
-  alternateNumber: string;
+
 
   // Step 7: Address & Delivery
   fullAddress: string;
@@ -101,11 +100,9 @@ export const OrderFunnel = () => {
     measurementType: "",
     measurementAddress: "",
     measurementDate: "",
-    measurementTime: "",
     measurementChart: null,
     fullName: "",
     whatsappNumber: "",
-    alternateNumber: "",
     fullAddress: "",
     city: "",
     pincode: "",
@@ -143,8 +140,7 @@ export const OrderFunnel = () => {
         if (formData.measurementType === "executive") {
           return (
             formData.measurementAddress !== "" &&
-            formData.measurementDate !== "" &&
-            formData.measurementTime !== ""
+            formData.measurementDate !== ""
           );
         } else if (formData.measurementType === "chart") {
           return formData.measurementChart !== null;
@@ -165,13 +161,67 @@ export const OrderFunnel = () => {
     }
   };
 
-  const handleConfirmOrder = () => {
-    const message = `Hi Collibet Team, I want to place a new tailoring order:\n\n*Garment Details:*\n\nCategory: ${formData.category}\nItem: ${formData.garment}\n\n*Fabric:*\n\n${formData.fabricType === "own" ? "Own Fabric (Will provide)" : "Store Fabric (Select at store)"}\n\n*Design:*\n\n${formData.designFile ? "Design uploaded" : "No design provided"}\n\n*Measurement:*\n\n${formData.measurementType === "executive" ? `Executive Visit - ${formData.measurementAddress} on ${formData.measurementDate} ${formData.measurementTime}` : formData.measurementType === "chart" ? "Chart uploaded" : "Not specified"}\n\n*Contact:*\nName: ${formData.fullName}\nWhatsApp: ${formData.whatsappNumber}\n${formData.alternateNumber ? `Alternate: ${formData.alternateNumber}` : ""}\n\n*Delivery Address:*\n${formData.fullAddress}\n${formData.landmark ? `Landmark: ${formData.landmark}` : ""}\n${formData.city}, ${formData.pincode}\n\nPlease confirm my order!`;
+  const [isSaving, setIsSaving] = useState(false);
 
-    const whatsappUrl = `https://wa.me/919876543210?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
-    setCurrentStep(8);
-    toast.success("Order submitted! Redirecting to WhatsApp...");
+  const handleConfirmOrder = async () => {
+    // Prepare payload matching server expectations. We send file names as metadata (no upload).
+    const payload = {
+      fullName: formData.fullName,
+      whatsappNumber: formData.whatsappNumber,
+      category: formData.category,
+      garment: formData.garment,
+      fabricType: formData.fabricType,
+      designFileUrl: formData.designFile ? formData.designFile.name : null,
+      measurementType: formData.measurementType,
+      measurementAddress: formData.measurementAddress,
+      measurementDate: formData.measurementDate || null,
+      measurementChartUrl: formData.measurementChart ? formData.measurementChart.name : null,
+      fullAddress: formData.fullAddress,
+      city: formData.city,
+      pincode: formData.pincode,
+      landmark: formData.landmark,
+      pickupDate: formData.pickupDate,
+      deliveryDate: formData.deliveryDate,
+      specialInstructions: formData.specialInstructions,
+      files: [] as Array<{ type?: string; name?: string; url?: string }>,
+    };
+
+    // add files metadata if present
+    if (formData.designFile) payload.files.push({ type: "design", name: formData.designFile.name, url: null });
+    if (formData.measurementChart) payload.files.push({ type: "measurement_chart", name: formData.measurementChart.name, url: null });
+
+    setIsSaving(true);
+    try {
+      const res = await fetch("http://localhost:5000/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      // Read raw text first so we can handle non-json error responses too
+      const text = await res.text();
+      let data: any = null;
+      try {
+        data = text ? JSON.parse(text) : null;
+      } catch (e) {
+        // ignore JSON parse errors
+      }
+
+      if (!res.ok) {
+        console.error("Save order failed, server responded:", res.status, text);
+        const msg = data?.error || text || `Server returned ${res.status}`;
+        toast.error(`Could not save order: ${msg}`);
+        return;
+      }
+
+      toast.success("Order saved — our team will contact you on WhatsApp shortly.");
+      setCurrentStep(8);
+    } catch (err) {
+      console.error("Save order failed (network/error):", err);
+      toast.error("Could not save order. Please try again later.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const renderStep = () => {
@@ -438,34 +488,14 @@ export const OrderFunnel = () => {
                     className="min-h-24"
                   />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Date
-                    </label>
+                    <label className="block text-sm font-medium mb-2">Date</label>
                     <Input
                       type="date"
                       value={formData.measurementDate}
                       onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          measurementDate: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Time
-                    </label>
-                    <Input
-                      type="time"
-                      value={formData.measurementTime}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          measurementTime: e.target.value,
-                        })
+                        setFormData({ ...formData, measurementDate: e.target.value })
                       }
                     />
                   </div>
@@ -571,22 +601,7 @@ export const OrderFunnel = () => {
                   }
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Alternate Number (Optional)
-                </label>
-                <Input
-                  type="tel"
-                  placeholder="Enter alternate number"
-                  value={formData.alternateNumber}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      alternateNumber: e.target.value,
-                    })
-                  }
-                />
-              </div>
+              {/* Alternate number removed per request */}
             </div>
           </div>
         );
@@ -882,13 +897,15 @@ export const OrderFunnel = () => {
                     ? handleConfirmOrder
                     : goToNextStep
                 }
-                disabled={!isStepValid()}
-                className={`flex-1 ${!isStepValid()
+                disabled={!isStepValid() || isSaving}
+                className={`flex-1 ${!isStepValid() || isSaving
                   ? "opacity-50 cursor-not-allowed"
                   : ""
                   }`}
               >
-                {currentStep === 7 ? (
+                {isSaving ? (
+                  "Saving..."
+                ) : currentStep === 7 ? (
                   <>
                     Confirm Order <ChevronRight className="w-5 h-5 ml-2" />
                   </>
@@ -917,11 +934,9 @@ export const OrderFunnel = () => {
                     measurementType: "",
                     measurementAddress: "",
                     measurementDate: "",
-                    measurementTime: "",
                     measurementChart: null,
                     fullName: "",
                     whatsappNumber: "",
-                    alternateNumber: "",
                     fullAddress: "",
                     city: "",
                     pincode: "",
