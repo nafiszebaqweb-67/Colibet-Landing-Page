@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Eye, Edit2, Trash2, Filter } from "lucide-react";
+import { useOrders } from "@/admin/api/hooks";
 
 interface Order {
   id: string;
@@ -19,58 +20,7 @@ export const AdminOrders = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
-  const orders: Order[] = [
-    {
-      id: "ORD1001",
-      customer: "Rajesh Kumar",
-      phone: "98765 43210",
-      garment: "Formal Shirt",
-      category: "Men",
-      status: "delivered",
-      amount: 2500,
-      date: "2024-11-10",
-    },
-    {
-      id: "ORD1002",
-      customer: "Priya Singh",
-      phone: "98765 43211",
-      garment: "Saree Blouse",
-      category: "Women",
-      status: "stitching",
-      amount: 1500,
-      date: "2024-11-12",
-    },
-    {
-      id: "ORD1003",
-      customer: "Amit Verma",
-      phone: "98765 43212",
-      garment: "Pant",
-      category: "Men",
-      status: "processing",
-      amount: 1200,
-      date: "2024-11-13",
-    },
-    {
-      id: "ORD1004",
-      customer: "Neha Gupta",
-      phone: "98765 43213",
-      garment: "Lehenga",
-      category: "Women",
-      status: "measurement",
-      amount: 5000,
-      date: "2024-11-14",
-    },
-    {
-      id: "ORD1005",
-      customer: "Vikram Singh",
-      phone: "98765 43214",
-      garment: "Blazer",
-      category: "Men",
-      status: "pending",
-      amount: 3500,
-      date: "2024-11-14",
-    },
-  ];
+  const { data: orders = [], isLoading } = useOrders();
 
   const statusColors: Record<Order["status"], string> = {
     pending: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
@@ -81,9 +31,10 @@ export const AdminOrders = () => {
     cancelled: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
   };
 
-  const filteredOrders = orders.filter((order) => {
-    const matchesSearch = order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order.id.toLowerCase().includes(searchTerm.toLowerCase());
+  const ordersList = (orders as any[]) || [];
+  const filteredOrders = ordersList.filter((order: any) => {
+    const matchesSearch = (order.customer || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (order.id || "").toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === "all" || order.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
@@ -143,7 +94,10 @@ export const AdminOrders = () => {
           <CardTitle>Recent Orders ({filteredOrders.length})</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
+          {isLoading ? (
+            <div className="p-6">Loading orders...</div>
+          ) : (
+            <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 dark:bg-gray-800/50">
                 <tr>
@@ -191,9 +145,10 @@ export const AdminOrders = () => {
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
+                </tbody>
+              </table>
+              </div>
+            )}
         </CardContent>
       </Card>
     </div>
