@@ -40,7 +40,7 @@ export const SocialProof = () => {
           <div className="inline-block bg-accent/20 backdrop-blur-sm border border-accent/30 rounded-full px-6 py-2 mb-4">
             <p className="text-accent font-semibold">⭐ Trusted in Ranchi</p>
           </div>
-          <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
+          <h2 className="font-heading text-4xl md:text-5xl text-secondary mb-4">
              Trusted by 500+ Ranchi Patrons
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
