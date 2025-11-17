@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, ChevronRight, Upload, Trash2 } from "lucide-react";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { toast } from "sonner";
 
 // Import category images
@@ -281,13 +282,13 @@ export const OrderFunnel = () => {
             <p className="text-muted-foreground mb-6">
               Choose what you want to stitch from our options:
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {garments.map((garment) => (
                 <Card
                   key={garment.name}
-                  className={`cursor-pointer transition-all hover:shadow-lg overflow-hidden ${formData.garment === garment.name
-                    ? "border-accent border-2 shadow-lg"
-                    : "hover:border-accent"
+                  className={`group cursor-pointer transition-all transform will-change-transform overflow-hidden ${formData.garment === garment.name
+                    ? "border-accent border-2 shadow-lg scale-105"
+                    : "hover:shadow-lg hover:scale-105"
                     }`}
                   onClick={() =>
                     setFormData({
@@ -297,13 +298,19 @@ export const OrderFunnel = () => {
                   }
                 >
                   <CardContent className="p-0 text-center">
-                    <img
-                      src={garment.image}
-                      alt={`${garment.name} garment`}
-                      className="w-full h-24 object-cover"
-                    />
-                    <div className="p-2">
-                      <p className="font-semibold text-sm">{garment.name}</p>
+                    <AspectRatio ratio={1} className="w-full">
+                      <img
+                        src={garment.image}
+                        alt={`${garment.name} garment`}
+                        className="w-full h-full object-cover"
+                      />
+                    </AspectRatio>
+
+                    <div className="p-2 flex flex-col items-center justify-center text-sm">
+                      <p className="font-medium text-sm text-center">{garment.name}</p>
+                      {formData.garment === garment.name && (
+                        <div className="text-accent text-sm font-semibold mt-1">Selected</div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
