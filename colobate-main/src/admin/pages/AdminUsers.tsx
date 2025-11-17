@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Eye, Edit2, Trash2, Mail, Phone } from "lucide-react";
+import { useUsers } from "@/admin/api/hooks";
 
 interface User {
   id: string;
@@ -18,70 +20,58 @@ interface User {
 
 export const AdminUsers = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const { data: rawUsers = [], isLoading: usersLoading } = useUsers();
 
-  const users: User[] = [
-    {
-      id: "USR001",
-      name: "Rajesh Kumar",
-      email: "rajesh@example.com",
-      phone: "98765 43210",
-      orders: 5,
-      totalSpent: 12500,
-      lastOrder: "2024-11-10",
-      status: "active",
-      joinDate: "2024-08-15",
-    },
-    {
-      id: "USR002",
-      name: "Priya Singh",
-      email: "priya@example.com",
-      phone: "98765 43211",
-      orders: 3,
-      totalSpent: 7500,
-      lastOrder: "2024-11-12",
-      status: "active",
-      joinDate: "2024-09-20",
-    },
-    {
-      id: "USR003",
-      name: "Amit Verma",
-      email: "amit@example.com",
-      phone: "98765 43212",
-      orders: 8,
-      totalSpent: 18900,
-      lastOrder: "2024-11-13",
-      status: "active",
-      joinDate: "2024-07-10",
-    },
-    {
-      id: "USR004",
-      name: "Neha Gupta",
-      email: "neha@example.com",
-      phone: "98765 43213",
-      orders: 1,
-      totalSpent: 5000,
-      lastOrder: "2024-11-14",
-      status: "active",
-      joinDate: "2024-11-01",
-    },
-    {
-      id: "USR005",
-      name: "Vikram Singh",
-      email: "vikram@example.com",
-      phone: "98765 43214",
-      orders: 2,
-      totalSpent: 4700,
-      lastOrder: "2024-10-20",
-      status: "inactive",
-      joinDate: "2024-06-05",
-    },
-  ];
+  // Normalize server and mock shapes into our User interface
+  const users = useMemo<User[]>(() => {
+    return (rawUsers || []).map((u: unknown) => {
+      const src = u as Record<string, unknown>;
 
-  const filteredUsers = users.filter((user) =>
+      const getString = (keys: string[], fallback = "-") => {
+        for (const k of keys) {
+          const v = src[k];
+          if (typeof v === "string") return v;
+          if (typeof v === "number") return String(v);
+        }
+        return fallback;
+      };
+
+      const getNumber = (keys: string[]) => {
+        for (const k of keys) {
+          const v = src[k];
+          if (typeof v === "number") return v;
+          if (typeof v === "string") {
+            const n = Number(v);
+            if (!isNaN(n)) return n;
+          }
+        }
+        return 0;
+      };
+
+      return {
+        id: getString(["id", "ID"], ""),
+        name: getString(["name", "customer_name"], "-"),
+        email: getString(["email"], ""),
+        phone: getString(["whatsapp_number", "phone"], ""),
+        orders: getNumber(["orders_count", "orders"]),
+        totalSpent: getNumber(["total_spent", "totalSpent"]),
+        lastOrder: getString(["lastOrder", "last_order"], "-"),
+        status: ((): "active" | "inactive" => {
+          const s = getString(["status"], "active");
+          return s === "inactive" ? "inactive" : "active";
+        })(),
+        joinDate: getString(["created_at", "joinDate"], "-"),
+      } as User;
+    });
+  }, [rawUsers]);
+
+  const navigate = useNavigate();
+
+  const filteredUsers = useMemo(() => users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.phone.includes(searchTerm)
-  );
+    (user.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (user.phone || "").includes(searchTerm)
+  ), [users, searchTerm]);
 
   return (
     <div className="space-y-6">
@@ -157,8 +147,8 @@ export const AdminUsers = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+                  {filteredUsers.map((user) => (
+                    <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors cursor-pointer" onClick={() => navigate(`/admin/orders?q=${encodeURIComponent(user.name)}`)}>
                     <td className="px-4 py-3">
                       <div>
                         <p className="font-semibold text-primary">{user.name}</p>

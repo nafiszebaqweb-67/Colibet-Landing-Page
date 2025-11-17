@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +40,7 @@ interface Order {
 export const AdminOrders = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [tab, setTab] = useState<"new" | "progress" | "completed" | "cancelled" | "all">("all");
+  const [searchParams, setSearchParams] = useSearchParams();
   const [sortBy, setSortBy] = useState<"date" | "amount" | "status">("date");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [page, setPage] = useState(1);
@@ -46,7 +48,45 @@ export const AdminOrders = () => {
   const [viewOrder, setViewOrder] = useState<Order | null>(null);
   const [editOrder, setEditOrder] = useState<Order | null>(null);
 
-  const { data: orders = [], isLoading, update, remove } = useOrders();
+  // initialize tab from URL `status` param if provided
+  useEffect(() => {
+    const s = searchParams.get("status");
+    if (s === "new" || s === "progress" || s === "completed" || s === "cancelled") {
+      setTab(s as "new" | "progress" | "completed" | "cancelled");
+    }
+  }, [searchParams]);
+
+  // initialize search term from URL `q` or `customer` param if provided
+  useEffect(() => {
+    const q = searchParams.get("q") || searchParams.get("customer");
+    if (q) setSearchTerm(q);
+  }, [searchParams]);
+
+  const statusArg = tab === "all" ? undefined : tab;
+  const { data: orders = [], isLoading, update, remove } = useOrders(statusArg as string | undefined);
+
+  // keep URL in sync when tab changes
+  useEffect(() => {
+    // keep URL in sync when tab changes
+    if (tab === "all") {
+      const copy = new URLSearchParams(searchParams.toString());
+      copy.delete("status");
+      setSearchParams(copy, { replace: true });
+      return;
+    }
+    const copy = new URLSearchParams(searchParams.toString());
+    copy.set("status", tab);
+    setSearchParams(copy, { replace: true });
+  }, [tab, searchParams, setSearchParams]);
+
+  // open order view if URL has ?order=ID
+  useEffect(() => {
+    const orderId = searchParams.get("order");
+    if (orderId && Array.isArray(orders) && orders.length) {
+      const found = (orders as Order[]).find((o) => String(o.id) === String(orderId));
+      if (found) setViewOrder(found);
+    }
+  }, [orders, searchParams]);
 
   const statusColors: Record<Order["status"], string> = {
     new: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
@@ -182,7 +222,7 @@ export const AdminOrders = () => {
                 ] as { key: TabKey; label: string }[]).map((t) => (
                   <button
                     key={t.key}
-                    onClick={() => setTab(t.key)}
+                    onClick={() => { setTab(t.key); setPage(1); }}
                     className={`px-4 py-2 font-medium border-b-2 transition-colors ${
                       tab === t.key
                         ? "border-primary text-primary"

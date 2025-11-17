@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { ShoppingCart, Users, TrendingUp, Clock, LucideIcon } from "lucide-react";
+import { useOrders, useUsers } from "@/admin/api/hooks";
+import { useNavigate } from "react-router-dom";
 
 const dashboardData = [
   { month: "Jan", orders: 40, revenue: 24 },
@@ -38,37 +40,59 @@ const StatCard = ({ icon: Icon, label, value, change }: StatCardProps) => (
 );
 
 export const AdminDashboard = () => {
+  const { data: orders = [] } = useOrders();
+  const { data: users = [] } = useUsers();
+  const navigate = useNavigate();
+
+  const totalOrders = Array.isArray(orders) ? orders.length : 0;
+  const pendingOrders = Array.isArray(orders) ? orders.filter((o: any) => (o.status || "new") !== "completed" && (o.status || "new") !== "cancelled").length : 0;
+  const revenue = Array.isArray(orders) ? orders.reduce((s: number, o: any) => s + (Number(o.amount) || 0), 0) : 0;
+  const activeUsers = Array.isArray(users) ? users.length : 0;
+
+  const shortRecent = Array.isArray(orders) ? orders.slice(0, 5) : [];
+  const recentUsers = Array.isArray(users) ? users.slice(0, 5) : [];
+
+  const fmt = (n: number) => new Intl.NumberFormat("en-IN").format(n);
+
   return (
     <div className="space-y-6">
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          icon={ShoppingCart}
-          label="Total Orders"
-          value="1,245"
-          change={12.5}
-        />
-        <StatCard
-          icon={Users}
-          label="Active Users"
-          value="342"
-          change={8.2}
-        />
-        <StatCard
-          icon={TrendingUp}
-          label="Revenue"
-          value="₹85,234"
-          change={23.1}
-        />
-        <StatCard
-          icon={Clock}
-          label="Pending Orders"
-          value="23"
-          change={-5.4}
-        />
+        <button type="button" aria-label="View all orders" className="text-left" onClick={() => navigate('/admin/orders')}>
+          <StatCard
+            icon={ShoppingCart}
+            label="Total Orders"
+            value={fmt(totalOrders)}
+            change={0}
+          />
+        </button>
+        <button type="button" aria-label="View users" className="text-left" onClick={() => navigate('/admin/users')}>
+          <StatCard
+            icon={Users}
+            label="Active Users"
+            value={fmt(activeUsers)}
+            change={0}
+          />
+        </button>
+        <button type="button" aria-label="View revenue" className="text-left" onClick={() => navigate('/admin/analytics')}>
+          <StatCard
+            icon={TrendingUp}
+            label="Revenue"
+            value={`₹${fmt(revenue)}`}
+            change={0}
+          />
+        </button>
+        <button type="button" aria-label="View pending orders" className="text-left" onClick={() => navigate('/admin/orders?status=progress')}>
+          <StatCard
+            icon={Clock}
+            label="Pending Orders"
+            value={fmt(pendingOrders)}
+            change={0}
+          />
+        </button>
       </div>
 
-      {/* Charts Section */}
+      {/* Charts Section (unchanged) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Orders Chart */}
         <Card>
@@ -109,7 +133,7 @@ export const AdminDashboard = () => {
         </Card>
       </div>
 
-      {/* Recent Orders */}
+      {/* Recent Orders (dynamic) */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Recent Orders</CardTitle>
@@ -127,22 +151,55 @@ export const AdminDashboard = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                    <td className="px-4 py-3 font-medium text-primary">#ORD{1000 + i}</td>
-                    <td className="px-4 py-3">Rajesh Kumar</td>
-                    <td className="px-4 py-3">Formal Shirt</td>
+                {shortRecent.map((o: any) => (
+                  <tr key={o.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer" onClick={() => navigate(`/admin/orders?status=${o.status || 'all'}&order=${encodeURIComponent(o.id)}`)}>
+                    <td className="px-4 py-3 font-medium text-primary">{o.id}</td>
+                    <td className="px-4 py-3">{o.customer || o.customer_name || "-"}</td>
+                    <td className="px-4 py-3">{o.garment || "-"}</td>
                     <td className="px-4 py-3">
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        i === 1 ? "bg-green-100 text-green-800" :
-                        i === 2 ? "bg-yellow-100 text-yellow-800" :
-                        i === 3 ? "bg-blue-100 text-blue-800" :
-                        "bg-purple-100 text-purple-800"
+                        o.status === "completed" ? "bg-green-100 text-green-800" :
+                        o.status === "progress" ? "bg-yellow-100 text-yellow-800" :
+                        o.status === "new" ? "bg-blue-100 text-blue-800" :
+                        "bg-red-100 text-red-800"
                       }`}>
-                        {i === 1 ? "Delivered" : i === 2 ? "Processing" : i === 3 ? "Stitching" : "Measurement"}
+                        {String(o.status || "new").charAt(0).toUpperCase() + String(o.status || "new").slice(1)}
                       </span>
                     </td>
-                    <td className="px-4 py-3 font-semibold text-primary">₹{2500 + i * 500}</td>
+                    <td className="px-4 py-3 font-semibold text-primary">₹{fmt(Number(o.amount) || 0)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Recent Users */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Recent Users</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 dark:bg-gray-800">
+                <tr>
+                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">User ID</th>
+                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Name</th>
+                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Phone</th>
+                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Orders</th>
+                  <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Total Spent</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                {recentUsers.map((u: any) => (
+                  <tr key={u.id} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <td className="px-4 py-3 font-medium text-primary">{u.id}</td>
+                    <td className="px-4 py-3">{u.name}</td>
+                    <td className="px-4 py-3">{u.whatsapp_number || '-'}</td>
+                    <td className="px-4 py-3">{u.orders_count ?? 0}</td>
+                    <td className="px-4 py-3 font-semibold text-primary">₹{fmt(Number(u.total_spent) || 0)}</td>
                   </tr>
                 ))}
               </tbody>
