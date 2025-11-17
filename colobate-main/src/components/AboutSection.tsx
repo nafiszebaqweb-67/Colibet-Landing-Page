@@ -1,34 +1,40 @@
-import { Scissors, Clock, Truck, MapPin, Award, Users, Sparkles, Zap, Heart } from "lucide-react";
+import { Scissors, Sparkles, Zap, Heart, Award } from "lucide-react";
+import featureCustomDesign from "@/assets/feature-custom-design.jpeg";
+import featureFastDelivery from "@/assets/feature-fast-delivery.jpeg";
+import featurePickupDrop from "@/assets/feature-pickup-drop.jpeg";
+import featureLocalExperts from "@/assets/feature-local-experts.jpeg";
+import featurePremiumQuality from "@/assets/feature-premium-quality.jpeg";
+import featureTrustedCustomers from "@/assets/feature-trusted-customers.jpeg";
 
 export const AboutSection = () => {
   const features = [
     { 
-      Icon: Scissors, 
+      image: featureCustomDesign, 
       text: "Custom Design for Men & Women",
       description: "Tailored perfectly to your style"
     },
     { 
-      Icon: Zap, 
+      image: featureFastDelivery, 
       text: "24-Hour Delivery Promise",
       description: "Lightning-fast turnaround time"
     },
     { 
-      Icon: Truck, 
+      image: featurePickupDrop, 
       text: "Pickup & Drop Available",
       description: "Convenient doorstep service"
     },
     { 
-      Icon: MapPin, 
+      image: featureLocalExperts, 
       text: "Based in Ranchi — Local Experts",
       description: "Your trusted neighborhood tailors"
     },
     { 
-      Icon: Award, 
+      image: featurePremiumQuality, 
       text: "Premium Stitching Quality",
       description: "Crafted with excellence & care"
     },
     { 
-      Icon: Users, 
+      image: featureTrustedCustomers, 
       text: "Trusted by 500+ Customers",
       description: "Join our satisfied community"
     },
@@ -56,10 +62,14 @@ export const AboutSection = () => {
                 style={{ animationDelay: `${index * 80}ms` }}
               >
                 <div className="flex items-start gap-4">
-                  {/* Icon Container */}
+                  {/* Image Container */}
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center group-hover:bg-accent/25 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                      <feature.Icon className="w-6 h-6 text-accent group-hover:text-accent/90" strokeWidth={2} />
+                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                      <img 
+                        src={feature.image} 
+                        alt={feature.text}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   </div>
                   
@@ -78,31 +88,31 @@ export const AboutSection = () => {
           </div>
 
           {/* Tagline Banner */}
-          <div className="relative overflow-hidden rounded-2xl bg-accent/10 border border-accent/15">
+          <div className="relative overflow-hidden rounded-2xl bg-accent/5 border border-accent/10">
             {/* Tailoring-Themed Decorative Elements */}
-            <div className="absolute top-3 left-6 opacity-90">
-              <Scissors className="w-10 h-10 text-white rotate-45" />
+            <div className="absolute top-3 left-6 opacity-15">
+              <Scissors className="w-10 h-10 text-accent rotate-45" />
             </div>
-            <div className="absolute bottom-1 right-6 opacity-90">
-              <Scissors className="w-10 h-10 text-white -rotate-45" />
+            <div className="absolute bottom-3 right-6 opacity-15">
+              <Scissors className="w-10 h-10 text-accent -rotate-45" />
             </div>
-            <div className="absolute top-1/2 left-12 opacity-90">
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="absolute top-1/2 left-12 opacity-10">
+              <Sparkles className="w-7 h-7 text-accent" />
             </div>
-            <div className="absolute top-1/2 right-12 opacity-90">
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="absolute top-1/2 right-12 opacity-10">
+              <Sparkles className="w-7 h-7 text-accent" />
             </div>
             
             {/* Content */}
             <div className="relative px-8 py-10 text-center">
               <blockquote className="relative">
                 <p className="text-xl md:text-2xl font-heading text-foreground leading-relaxed max-w-3xl mx-auto">
-                  <b>We don't just stitch — we create</b>{" "}
+                  We don't just stitch — we create{" "}
                   <span className="relative inline-block">
                     <span className="relative z-10 font-bold text-primary">comfort</span>
                     <span className="absolute bottom-0 left-0 w-full h-1.5 bg-primary/20 -z-0" />
                   </span>
-                  {" "}<b>and</b>{" "}
+                  {" "}and{" "}
                   <span className="relative inline-block">
                     <span className="relative z-10 font-bold text-accent">confidence</span>
                     <span className="absolute bottom-0 left-0 w-full h-1.5 bg-accent/20 -z-0" />
@@ -120,7 +130,7 @@ export const AboutSection = () => {
               <div className="group text-center animate-fade-in">
                 <div className="relative inline-block mb-4 perspective-1000">
                   <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:shadow-[0_20px_50px_rgba(59,130,246,0.3)] transition-all duration-500 relative z-10" style={{ transformStyle: 'preserve-3d' }}>
-                    <Award className="w-8 h-8 text-primary group-hover:animate-spin transition-transform duration-500" strokeWidth={1.5} style={{ animationDuration: '1s' }} />
+                    <Award className="w-8 h-8 text-primary group-hover:animate-spin transition-transform duration-500" strokeWidth={2} style={{ animationDuration: '1s' }} />
                   </div>
                   <div className="absolute inset-0 rounded-full bg-primary/5 blur-xl transition-all duration-500" />
                 </div>
@@ -134,7 +144,7 @@ export const AboutSection = () => {
               <div className="group text-center animate-fade-in" style={{ animationDelay: '100ms' }}>
                 <div className="relative inline-block mb-4 perspective-1000">
                   <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center group-hover:shadow-[0_20px_50px_rgba(251,191,36,0.3)] transition-all duration-500 relative z-10" style={{ transformStyle: 'preserve-3d' }}>
-                    <Zap className="w-8 h-8 text-accent group-hover:animate-spin transition-transform duration-500" strokeWidth={1.5} style={{ animationDuration: '1s' }} />
+                    <Zap className="w-8 h-8 text-accent group-hover:animate-spin transition-transform duration-500" strokeWidth={2} style={{ animationDuration: '1s' }} />
                   </div>
                   <div className="absolute inset-0 rounded-full bg-accent/5 blur-xl transition-all duration-500" />
                 </div>
@@ -148,7 +158,7 @@ export const AboutSection = () => {
               <div className="group text-center animate-fade-in" style={{ animationDelay: '200ms' }}>
                 <div className="relative inline-block mb-4 perspective-1000">
                   <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:shadow-[0_20px_50px_rgba(59,130,246,0.3)] transition-all duration-500 relative z-10" style={{ transformStyle: 'preserve-3d' }}>
-                    <Heart className="w-8 h-8 text-primary group-hover:animate-spin transition-transform duration-500" strokeWidth={1.5} fill="currentColor" style={{ animationDuration: '1s' }} />
+                    <Heart className="w-8 h-8 text-primary group-hover:animate-spin transition-transform duration-500" strokeWidth={2} fill="currentColor" style={{ animationDuration: '1s' }} />
                   </div>
                   <div className="absolute inset-0 rounded-full bg-primary/5 blur-xl transition-all duration-500" />
                 </div>

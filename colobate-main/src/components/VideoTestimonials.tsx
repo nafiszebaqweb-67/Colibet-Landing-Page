@@ -8,35 +8,103 @@ import {
 
 interface VideoTestimonial {
   id: string;
-  videoUrl: string;
+  videoUrl: string; // Can be local file path, YouTube URL, Instagram URL, or any direct video URL
   caption: string;
 }
 
+// Helper function to detect video type and extract necessary info
+const getVideoType = (url: string) => {
+  // YouTube
+  if (url.includes('youtube.com') || url.includes('youtu.be')) {
+    let videoId = '';
+    if (url.includes('youtu.be/')) {
+      videoId = url.split('youtu.be/')[1].split('?')[0];
+    } else if (url.includes('watch?v=')) {
+      videoId = url.split('watch?v=')[1].split('&')[0];
+    } else if (url.includes('shorts/')) {
+      videoId = url.split('shorts/')[1].split('?')[0];
+    }
+    return { type: 'youtube', id: videoId };
+  }
+  
+  // Instagram
+  if (url.includes('instagram.com')) {
+    return { type: 'instagram', url };
+  }
+  
+  // Direct video file or other platforms
+  return { type: 'direct', url };
+};
+
+// Component to render video based on type
+const VideoPlayer = ({ videoUrl }: { videoUrl: string }) => {
+  const videoInfo = getVideoType(videoUrl);
+
+  if (videoInfo.type === 'youtube') {
+    return (
+      <iframe
+        src={`https://www.youtube.com/embed/${videoInfo.id}?autoplay=1&mute=1&loop=1&playlist=${videoInfo.id}&controls=0&modestbranding=1&rel=0`}
+        className="w-full h-full object-cover"
+        allow="autoplay; encrypted-media"
+        allowFullScreen
+        style={{ border: 'none' }}
+      />
+    );
+  }
+
+  if (videoInfo.type === 'instagram') {
+    // Instagram embed - note: Instagram videos in embeds don't autoplay by default
+    const embedUrl = videoInfo.url.replace('/reel/', '/p/').replace('/tv/', '/p/') + 'embed/';
+    return (
+      <iframe
+        src={embedUrl}
+        className="w-full h-full"
+        allowFullScreen
+        style={{ border: 'none' }}
+      />
+    );
+  }
+
+  // Direct video file (local or URL)
+  return (
+    <video
+      src={videoInfo.url}
+      className="w-full h-full object-cover"
+      autoPlay
+      loop
+      muted
+      playsInline
+    />
+  );
+};
+
 export const VideoTestimonials = () => {
+  // You can add any combination of:
+  // - Local video files: "/videos/my-video.mp4"
+  // - YouTube URLs: "https://www.youtube.com/watch?v=VIDEO_ID" or "https://youtu.be/VIDEO_ID"
+  // - YouTube Shorts: "https://www.youtube.com/shorts/VIDEO_ID"
+  // - Instagram URLs: "https://www.instagram.com/reel/REEL_ID/"
+  // - Direct video URLs from any platform: "https://example.com/video.mp4"
+  
   const testimonials: VideoTestimonial[] = [
     {
       id: "1",
-      videoUrl: "/video/3888261-hd_1080_2048_25fps.mp4", // Replace with your local video file path
+      videoUrl: "/video/3682815-hd_1080_2048_25fps.mp4", // Local video file
       caption: "Hi! from the founder and How it works",
     },
     {
       id: "2",
-      videoUrl: "/video/3894725-hd_1080_2048_25fps.mp4", // Replace with your local video file path
+      videoUrl: "https://www.youtube.com/shorts/BGZ_5weRQk4", // YouTube URL example
       caption: "Online ordering but Measurements?",
     },
     {
       id: "3",
-      videoUrl: "/video/4008365-hd_1080_2048_25fps.mp4", // Replace with your local video file path
+      videoUrl: "https://www.youtube.com/shorts/pjqYqV3cAOw", // Local video file
       caption: "Are you serviceable in my city?",
     },
     {
       id: "4",
-      videoUrl: "/video/3894725-hd_1080_2048_25fps.mp4", // Replace with your local video file path
-      caption: "Delivery time & Express options",
-    },
-    {
-      id: "5",
-      videoUrl: "/video/3682815-hd_1080_2048_25fps.mp4", // Replace with your local video file path
+      videoUrl: "/video/3894725-hd_1080_2048_25fps.mp4", // Local video file
       caption: "Delivery time & Express options",
     },
   ];
@@ -45,7 +113,7 @@ export const VideoTestimonials = () => {
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-fade-in">
-          <div className="inline-block backdrop-blur-sm border border-accent/30 bg-accent/10 rounded-full px-6 py-2 mb-4">
+          <div className="inline-block bg-accent/10 rounded-full px-6 py-2 mb-4">
             <p className="text-accent font-semibold">📹 Video Testimonials</p>
           </div>
           <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
@@ -74,17 +142,10 @@ export const VideoTestimonials = () => {
                     className="animate-fade-in"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    {/* Video Card */}
+                    {/* Video Card - Fixed 3:4 aspect ratio */}
                     <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-muted shadow-card hover:shadow-card-hover transition-all duration-300">
-                      {/* Video Element */}
-                      <video
-                        src={testimonial.videoUrl}
-                        className="w-full h-full object-cover"
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                      />
+                      {/* Video Player - supports local files, YouTube, Instagram, and other platforms */}
+                      <VideoPlayer videoUrl={testimonial.videoUrl} />
                     </div>
 
                     {/* Caption Below Card */}
