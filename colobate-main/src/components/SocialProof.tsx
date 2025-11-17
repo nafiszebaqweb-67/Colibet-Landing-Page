@@ -1,6 +1,12 @@
 import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
+// avatars (use existing image assets as real-person placeholders)
+import avatar1 from "@/assets/men-category.jpg";
+import avatar2 from "@/assets/women-category.jpg";
+import avatar3 from "@/assets/men-category.jpg";
+import avatar4 from "@/assets/women-category.jpg";
+
 export const SocialProof = () => {
   const reviews = [
     {
@@ -8,6 +14,7 @@ export const SocialProof = () => {
       location: "Harmu, Ranchi",
       rating: 5,
       text: "Perfect fitting! Got my suit stitched overnight for an important meeting. The quality is outstanding!",
+      avatarSrc: avatar1,
       avatar: "👨‍💼",
     },
     {
@@ -15,6 +22,7 @@ export const SocialProof = () => {
       location: "Lalpur, Ranchi",
       rating: 5,
       text: "Blouse delivered next day — unbelievable speed! The stitching is flawless and the fit is perfect.",
+      avatarSrc: avatar2,
       avatar: "👩",
     },
     {
@@ -22,6 +30,7 @@ export const SocialProof = () => {
       location: "Morabadi, Ranchi",
       rating: 4,
       text: "Pickup and delivery was smooth. Great work on my kurta pajama. Will definitely come back!",
+      avatarSrc: avatar3,
       avatar: "👨",
     },
     {
@@ -29,6 +38,7 @@ export const SocialProof = () => {
       location: "Doranda, Ranchi",
       rating: 5,
       text: "Best tailoring service in Ranchi! They understood exactly what I wanted. Highly recommended.",
+      avatarSrc: avatar4,
       avatar: "👩‍🦰",
     },
   ];
@@ -73,9 +83,13 @@ export const SocialProof = () => {
 
                 {/* Reviewer Info */}
                 <div className="flex items-center gap-3 pt-4 border-t border-accent/10">
-                  <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center text-2xl">
-                    {review.avatar}
-                  </div>
+                  <div className="w-10 h-10 rounded-full overflow-hidden">
+                      {review.avatarSrc ? (
+                        <img src={review.avatarSrc} alt={`${review.name} avatar`} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-accent/10 flex items-center justify-center text-2xl">{review.avatar}</div>
+                      )}
+                    </div>
                   <div>
                     <p className="font-semibold text-primary text-sm">{review.name}</p>
                     <p className="text-xs text-muted-foreground">{review.location}</p>

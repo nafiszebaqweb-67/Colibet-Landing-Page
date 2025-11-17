@@ -228,7 +228,7 @@ export const OrderFunnel = () => {
   const renderStep = () => {
     switch (currentStep) {
       // Step 1: Category Selection
-      case 1:
+      case 1: {
         const categoryImages = {
           Men: menImage,
           Women: womenImage,
@@ -242,26 +242,24 @@ export const OrderFunnel = () => {
             <p className="text-muted-foreground mb-6">
               What type of clothing would you like?
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {(["Men", "Women", "Kids"] as const).map((cat) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {["Men", "Women", "Kids"].map((cat) => (
                 <Card
                   key={cat}
-                  className={`cursor-pointer transition-all hover:shadow-lg overflow-hidden ${formData.category === cat
-                    ? "border-accent border-2 shadow-lg"
-                    : "hover:border-accent"
-                    }`}
-                  onClick={() =>
-                    setFormData({ ...formData, category: cat })
-                  }
+                  className={`cursor-pointer overflow-hidden border rounded ${formData.category === cat ? "border-accent border-2 shadow-sm" : "border-transparent"}`}
+                  onClick={() => setFormData({ ...formData, category: cat as "Men" | "Women" | "Kids" })}
                 >
-                  <CardContent className="p-0 text-center">
-                    <img
-                      src={categoryImages[cat as keyof typeof categoryImages]}
-                      alt={`${cat} category`}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-4">
-                      <p className="font-semibold text-lg">{cat}</p>
+                  <CardContent className="p-0">
+                    <AspectRatio ratio={1} className="w-full">
+                      <img
+                        src={categoryImages[cat as keyof typeof categoryImages]}
+                        alt={`${cat} category`}
+                        className="w-full h-full object-cover"
+                      />
+                    </AspectRatio>
+
+                    <div className="p-3 text-center">
+                      <p className="font-semibold text-sm">{cat}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -269,6 +267,7 @@ export const OrderFunnel = () => {
             </div>
           </div>
         );
+      }
 
       // Step 2: Garment Selection
       case 2: {
@@ -286,16 +285,8 @@ export const OrderFunnel = () => {
               {garments.map((garment) => (
                 <Card
                   key={garment.name}
-                  className={`group cursor-pointer transition-all transform will-change-transform overflow-hidden ${formData.garment === garment.name
-                    ? "border-accent border-2 shadow-lg scale-105"
-                    : "hover:shadow-lg hover:scale-105"
-                    }`}
-                  onClick={() =>
-                    setFormData({
-                      ...formData,
-                      garment: garment.name,
-                    })
-                  }
+                  className={`cursor-pointer overflow-hidden border rounded ${formData.garment === garment.name ? "border-accent border-2 shadow-sm" : "border-transparent"}`}
+                  onClick={() => setFormData({ ...formData, garment: garment.name })}
                 >
                   <CardContent className="p-0 text-center">
                     <AspectRatio ratio={1} className="w-full">

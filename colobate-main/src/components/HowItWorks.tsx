@@ -2,6 +2,9 @@ import { useState } from "react";
 import step1Image from "@/assets/step-1.png";
 import step2Image from "@/assets/step-2.png";
 import step3Image from "@/assets/step-3.png";
+import stepLarge1Image from "@/assets/step-large-1.png";
+import stepLarge2Image from "@/assets/step-large-2.png";
+import stepLarge3Image from "@/assets/step-large-3.png";
 
 export const HowItWorks = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -10,18 +13,21 @@ export const HowItWorks = () => {
     {
       number: "1",
       image: step1Image,
+      largeImage: stepLarge1Image,
       title: "Choose Your Design",
       description: "Share your fabric & style preferences. We help you create the perfect look.",
     },
     {
       number: "2",
       image: step2Image,
+      largeImage: stepLarge2Image,
       title: "We Stitch It Custom",
       description: "Our expert tailors craft your perfect fit with precision and care.",
     },
     {
       number: "3",
       image: step3Image,
+      largeImage: stepLarge3Image,
       title: "Delivered in 24 Hours",
       description: "Straight to your doorstep in Ranchi. Fast, reliable, premium quality.",
     },
@@ -35,6 +41,9 @@ export const HowItWorks = () => {
     <section className="py-20" style={{ background: 'var(--gradient-section-blue-in)' }}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
+          <div className="inline-block bg-accent/20 backdrop-blur-sm border border-accent/30 rounded-full px-6 py-2 mb-4">
+            <p className="text-accent font-semibold">🪜 Simple Steps</p>
+          </div>
           <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
             Your Perfect Fit in 3 Simple Steps
           </h2>
@@ -138,14 +147,14 @@ export const HowItWorks = () => {
             {/* Right Side: Large Circular Icon Badge */}
             <div className="w-full lg:w-[40%] flex justify-center lg:justify-start">
               <div 
-                className="w-72 h-72 sm:w-80 sm:h-80 lg:w-[22rem] lg:h-[22rem] bg-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 ease-out"
+                className="w-72 h-72 sm:w-80 sm:h-80 lg:w-[22rem] lg:h-[22rem] bg-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 ease-out overflow-hidden"
                 key={activeStep}
               >
-                <div className="w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center">
+                <div className="w-full h-full flex items-center justify-center p-8">
                   <img 
-                    src={steps[activeStep].image} 
+                    src={steps[activeStep].largeImage}
                     alt={steps[activeStep].title}
-                    className="w-full h-full object-contain animate-fade-in"
+                    className="w-full h-full object-cover rounded-full animate-fade-in"
                   />
                 </div>
               </div>

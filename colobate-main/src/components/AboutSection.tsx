@@ -45,6 +45,9 @@ export const AboutSection = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16 animate-fade-in">
+            <div className="inline-block bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-full px-6 py-2 mb-4">
+            <p className="text-primary font-semibold">❔ Choose Collibet</p>
+          </div>
             <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
               Why Choose Collibet Tailoring?
             </h2>
@@ -90,17 +93,17 @@ export const AboutSection = () => {
           {/* Tagline Banner */}
           <div className="relative overflow-hidden rounded-2xl bg-accent/5 border border-accent/10">
             {/* Tailoring-Themed Decorative Elements */}
-            <div className="absolute top-3 left-6 opacity-15">
-              <Scissors className="w-10 h-10 text-accent rotate-45" />
+            <div className="absolute top-3 left-6 opacity-80">
+              <Scissors className="w-10 h-10 text-white rotate-45" />
             </div>
-            <div className="absolute bottom-3 right-6 opacity-15">
-              <Scissors className="w-10 h-10 text-accent -rotate-45" />
+            <div className="absolute bottom-3 right-6 opacity-80">
+              <Scissors className="w-10 h-10 text-white -rotate-45" />
             </div>
-            <div className="absolute top-1/2 left-12 opacity-10">
-              <Sparkles className="w-7 h-7 text-accent" />
+            <div className="absolute top-1/2 left-12 opacity-80">
+              <Sparkles className="w-7 h-7 text-white" />
             </div>
-            <div className="absolute top-1/2 right-12 opacity-10">
-              <Sparkles className="w-7 h-7 text-accent" />
+            <div className="absolute top-1/2 right-12 opacity-80">
+              <Sparkles className="w-7 h-7 text-white" />
             </div>
             
             {/* Content */}
