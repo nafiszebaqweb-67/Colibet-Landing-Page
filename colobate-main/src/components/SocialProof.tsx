@@ -1,11 +1,13 @@
 import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-
-// avatars (use existing image assets as real-person placeholders)
-import avatar1 from "@/assets/men-category.jpg";
-import avatar2 from "@/assets/women-category.jpg";
-import avatar3 from "@/assets/men-category.jpg";
-import avatar4 from "@/assets/women-category.jpg";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export const SocialProof = () => {
   const reviews = [
@@ -14,32 +16,42 @@ export const SocialProof = () => {
       location: "Harmu, Ranchi",
       rating: 5,
       text: "Perfect fitting! Got my suit stitched overnight for an important meeting. The quality is outstanding!",
-      avatarSrc: avatar1,
-      avatar: "👨‍💼",
+      image: "/src/assets/men-category.jpg", // Add customer image URL here
     },
     {
       name: "Priya Sharma",
       location: "Lalpur, Ranchi",
       rating: 5,
       text: "Blouse delivered next day — unbelievable speed! The stitching is flawless and the fit is perfect.",
-      avatarSrc: avatar2,
-      avatar: "👩",
+      image: "/src/assets/women-category.jpg", // Add customer image URL here
     },
     {
       name: "Amit Kumar",
       location: "Morabadi, Ranchi",
       rating: 4,
       text: "Pickup and delivery was smooth. Great work on my kurta pajama. Will definitely come back!",
-      avatarSrc: avatar3,
-      avatar: "👨",
+      image: "", // Add customer image URL here
     },
     {
       name: "Sneha Verma",
       location: "Doranda, Ranchi",
       rating: 5,
       text: "Best tailoring service in Ranchi! They understood exactly what I wanted. Highly recommended.",
-      avatarSrc: avatar4,
-      avatar: "👩‍🦰",
+      image: "", // Add customer image URL here
+    },
+    {
+      name: "Deepak Mishra",
+      location: "Kanke, Ranchi",
+      rating: 5,
+      text: "Amazing service! The attention to detail is incredible. My wedding sherwani turned out perfect!",
+      image: "", // Add customer image URL here
+    },
+    {
+      name: "Anjali Singh",
+      location: "HEC, Ranchi",
+      rating: 5,
+      text: "Fast and professional. The quality exceeded my expectations. Highly recommend for custom stitching!",
+      image: "", // Add customer image URL here
     },
   ];
 
@@ -47,65 +59,73 @@ export const SocialProof = () => {
     <section className="py-20" style={{ background: 'var(--gradient-section-blue-out)' }}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
-          <div className="inline-block bg-accent/20 backdrop-blur-sm border border-accent/30 rounded-full px-6 py-2 mb-4">
+          <div className="inline-block bg-accent/10 rounded-full px-6 py-2 mb-4">
             <p className="text-accent font-semibold">⭐ Trusted in Ranchi</p>
           </div>
-          <h2 className="font-heading text-4xl md:text-5xl text-secondary mb-4">
-             Trusted by 500+ Ranchi Patrons
+          <h2 className="font-heading text-4xl md:text-5xl text-accent mb-4">
+            Loved by 500+ Ranchi Clients
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Real reviews from real customers who trusted us with their perfect fit
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {reviews.map((review, index) => (
-            <Card 
-              key={index}
-              className="border-accent/20 hover:border-accent/40 transition-all hover:shadow-xl animate-slide-up"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              <CardContent className="p-6">
-                {/* Rating Stars */}
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star 
-                      key={i}
-                      className={`w-4 h-4 ${i < review.rating ? 'fill-accent text-accent' : 'text-muted'}`}
-                    />
-                  ))}
-                </div>
-
-                {/* Review Text */}
-                <p className="text-foreground mb-4 leading-relaxed text-sm">
-                  "{review.text}"
-                </p>
-
-                {/* Reviewer Info */}
-                <div className="flex items-center gap-3 pt-4 border-t border-accent/10">
-                  <div className="w-10 h-10 rounded-full overflow-hidden">
-                      {review.avatarSrc ? (
-                        <img src={review.avatarSrc} alt={`${review.name} avatar`} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full bg-accent/10 flex items-center justify-center text-2xl">{review.avatar}</div>
-                      )}
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full max-w-7xl mx-auto"
+        >
+          <CarouselContent className="-ml-4">
+            {reviews.map((review, index) => (
+              <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                <Card 
+                  className="border-accent/20 hover:border-accent/40 transition-all hover:shadow-xl h-full"
+                >
+                  <CardContent className="p-6 flex flex-col h-full">
+                    {/* Reviewer Info at Top */}
+                    <div className="flex items-center gap-4 mb-4">
+                      <Avatar className="w-16 h-16 border-2 border-accent/20">
+                        <AvatarImage src={review.image} alt={review.name} />
+                        <AvatarFallback className="bg-accent/10 text-accent text-lg font-semibold">
+                          {review.name.split(' ').map(n => n[0]).join('')}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <p className="font-semibold text-primary text-base">{review.name}</p>
+                        <p className="text-sm text-muted-foreground">{review.location}</p>
+                        {/* Rating Stars */}
+                        <div className="flex gap-1 mt-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star 
+                              key={i}
+                              className={`w-4 h-4 ${i < review.rating ? 'fill-accent text-accent' : 'text-muted'}`}
+                            />
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  <div>
-                    <p className="font-semibold text-primary text-sm">{review.name}</p>
-                    <p className="text-xs text-muted-foreground">{review.location}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+
+                    {/* Review Text */}
+                    <p className="text-foreground leading-relaxed text-sm flex-1">
+                      "{review.text}"
+                    </p>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="hidden md:flex -left-12" />
+          <CarouselNext className="hidden md:flex -right-12" />
+        </Carousel>
 
         {/* Social Proof Stats */}
         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
           {[
             { number: "500+", label: "Happy Customers" },
             { number: "24hr", label: "Delivery Promise" },
-            { number: "4.8★", label: "Average Rating" },
+            { number: "4.5★", label: "Average Rating" },
             { number: "100%", label: "Quality Guaranteed" },
           ].map((stat, index) => (
             <div key={index} className="text-center animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
