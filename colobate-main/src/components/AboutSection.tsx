@@ -67,7 +67,7 @@ export const AboutSection = () => {
                 <div className="flex items-start gap-4">
                   {/* Image Container */}
                   <div className="flex-shrink-0">
-                    <div className="w-16 h-16 rounded-lg overflow-hidden bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                    <div className="w-16 h-20 rounded-lg overflow-hidden bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
                       <img 
                         src={feature.image} 
                         alt={feature.text}
