@@ -14,8 +14,8 @@ export const HowItWorks = () => {
       number: "1",
       image: step1Image,
       largeImage: stepLarge1Image,
-      title: "Choose Your Design",
-      description: "Share your fabric & style preferences. We help you create the perfect look.",
+      title: "Design & Style Consultation",
+      description: "Share your fabric & style preferences with our design experts for a perfect look.",
     },
     {
       number: "2",
@@ -45,10 +45,10 @@ export const HowItWorks = () => {
             <p className="text-accent font-semibold">🪜 Simple Steps</p>
           </div>
           <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
-            Your Perfect Fit in 3 Simple Steps
+            Seamless Custom Tailoring in 3 Steps
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            From consultation to delivery, we make custom tailoring effortless
+            From design to delivery, we make your custom fit effortless.
           </p>
         </div>
 

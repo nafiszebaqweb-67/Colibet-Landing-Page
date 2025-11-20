@@ -17,16 +17,16 @@ export const OfferSection = ({ onBookNow }: OfferSectionProps) => {
           {/* Offer Badge */}
           <div className="inline-flex items-center gap-2 bg-accent rounded-full px-6 py-3 mb-6 shadow-lg animate-bounce">
             <Gift className="w-5 h-5 text-primary" />
-            <span className="font-bold text-primary">Limited Time Offer!</span>
+            <span className="font-bold text-primary"> Ranchi Special Offer!</span>
           </div>
 
           {/* Main Offer Text */}
           <h2 className="font-heading text-3xl md:text-5xl text-foreground mb-4">
-            🎁 Flat <span className="text-primary">20% OFF</span> on Your First Stitch
+            🎁 Get <span className="text-primary">20% OFF</span> on Your First Custom Tailored Outfit
           </h2>
           
           <p className="text-xl text-foreground/90 mb-2">
-            Limited Offer for Ranchi Customers
+            Exclusive welcome discount for all new customers in Ranchi. Book your consultation today!
           </p>
 
           {/* Urgency Indicator */}
@@ -43,7 +43,7 @@ export const OfferSection = ({ onBookNow }: OfferSectionProps) => {
               onClick={onBookNow}
               className="shadow-2xl"
             >
-              👉 Grab My Discount & Book Now
+              👉 Claim Offer & Schedule Measurement
             </Button>
           </div>
 

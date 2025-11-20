@@ -48,7 +48,7 @@ All colors MUST be HSL.
     --gradient-gold: linear-gradient(135deg, hsl(48 100% 55%), hsl(48 100% 65%));
     
     /* Section Gradients - Blue */
-    --gradient-section-blue-in: linear-gradient(180deg, hsl(200 85% 85% / 0) 0%, hsl(200 85% 75% / 0.3) 30%, hsl(200 85% 60%) 100%);
+    --gradient-section-blue-in: linear-gradient(180deg, hsl(200deg 100% 83% / 1%) 0%, hsl(200deg 85% 75% / 6%) 30%, hsl(200deg 85% 60%) 100%);
     --gradient-section-blue-out: linear-gradient(180deg, hsl(200 85% 60%) 0%, hsl(200 85% 75% / 0.3) 70%, hsl(200 85% 85% / 0) 100%);
     --gradient-section-blue-in-out: linear-gradient(180deg, hsl(200 85% 85% / 0) 0%, hsl(200 85% 70% / 0.5) 20%, hsl(200 85% 60% / 0.65) 50%, hsl(200 85% 70% / 0.5) 80%, hsl(200 85% 85% / 0) 100%);
 

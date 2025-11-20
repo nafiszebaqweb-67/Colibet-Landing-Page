@@ -90,22 +90,22 @@ export const VideoTestimonials = () => {
     {
       id: "1",
       videoUrl: "/video/3682815-hd_1080_2048_25fps.mp4", // Local video file
-      caption: "Hi! from the founder and How it works",
+      caption: "Meet Our Founder & Learn Our Tailoring Process",
     },
     {
       id: "2",
       videoUrl: "https://www.youtube.com/shorts/BGZ_5weRQk4", // YouTube URL example
-      caption: "Online ordering but Measurements?",
+      caption: "Online Stitching? See How We Take Perfect Measurements ",
     },
     {
       id: "3",
       videoUrl: "https://www.youtube.com/shorts/pjqYqV3cAOw", // Local video file
-      caption: "Are you serviceable in my city?",
+      caption: "Ranchi Service Areas: We Deliver Quality Tailoring to Your Doorstep ",
     },
     {
       id: "4",
       videoUrl: "/video/3894725-hd_1080_2048_25fps.mp4", // Local video file
-      caption: "Delivery time & Express options",
+      caption: "Fast Delivery Options: Get Your Custom Outfit Sooner ",
     },
   ];
 
@@ -114,13 +114,13 @@ export const VideoTestimonials = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-fade-in">
           <div className="inline-block bg-accent/10 rounded-full px-6 py-2 mb-4">
-            <p className="text-accent font-semibold">📹 Video Testimonials</p>
+            <p className="text-accent font-semibold">📹 Our Customer Stories </p>
           </div>
           <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
             See What Our Customers Say
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Real stories from real customers about their experience with Collibet Tailoring
+            Hear directly from our happy clients about their perfect custom outfits and service in Ranchi. 
           </p>
         </div>
 

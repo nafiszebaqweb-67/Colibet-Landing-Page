@@ -10,33 +10,33 @@ export const AboutSection = () => {
   const features = [
     { 
       image: featureCustomDesign, 
-      text: "Custom Design for Men & Women",
-      description: "Tailored perfectly to your style"
+      text: "Bespoke Tailoring for All",
+      description: "Custom-designed suits, shirts, and ethnic wear tailored to your unique style and body."
     },
     { 
       image: featureFastDelivery, 
-      text: "24-Hour Delivery Promise",
-      description: "Lightning-fast turnaround time"
+      text: "Express Delivery Options",
+      description: "Need it fast? Get your custom stitch ready in 24 hours with our priority express service."
     },
     { 
       image: featurePickupDrop, 
-      text: "Pickup & Drop Available",
-      description: "Convenient doorstep service"
+      text: "Convenient Doorstep Service",
+      description: "Free pickup of fabric and final delivery of your stitched outfit right to your Ranchi location."
     },
     { 
       image: featureLocalExperts, 
-      text: "Based in Ranchi — Local Experts",
-      description: "Your trusted neighborhood tailors"
+      text: "Trusted Local Master Tailors",
+      description: "Serving the Ranchi community for years. Get perfect fitting from your neighborhood's most trusted tailors."
     },
     { 
       image: featurePremiumQuality, 
-      text: "Premium Stitching Quality",
-      description: "Crafted with excellence & care"
+      text: "Guaranteed Premium Quality",
+      description: "We use high-grade thread and precision techniques to ensure every stitch is durable and flawless."
     },
     { 
       image: featureTrustedCustomers, 
-      text: "Trusted by 500+ Customers",
-      description: "Join our satisfied community"
+      text: "Ranchi's Top-Rated Tailor",
+      description: "Join our satisfied community of over 500 happy clients who wear their perfect fit proudly."
     },
   ];
 
@@ -49,10 +49,10 @@ export const AboutSection = () => {
             <p className="text-primary font-semibold">❔ Choose Collibet</p>
           </div>
             <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
-              Why Choose Collibet Tailoring?
+              Why We Are Ranchi's Top Custom Tailors
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We're not just another tailoring service — we're your partner in looking your absolute best
+              Your search for the perfect fit ends here. Discover the Collibet Advantage.
             </p>
           </div>
 
@@ -67,7 +67,7 @@ export const AboutSection = () => {
                 <div className="flex items-start gap-4">
                   {/* Image Container */}
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                    <div className="w-16 h-16 rounded-lg overflow-hidden bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
                       <img 
                         src={feature.image} 
                         alt={feature.text}

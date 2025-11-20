@@ -66,7 +66,7 @@ export const SocialProof = () => {
             Loved by 500+ Ranchi Clients
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Real reviews from real customers who trusted us with their perfect fit
+            The Best Custom Stitching Experience in Ranchi.
           </p>
         </div>
 
