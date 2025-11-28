@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, Sparkles } from "lucide-react";
-import heroBackground from "@/assets/Collibate hero.jpg";
+import { MessageCircle, Sparkles, Calendar } from "lucide-react";
+import heroBackground from "@/assets/ColibateHero.png";
 
 interface HeroProps {
   onStartOrder: () => void;
@@ -69,7 +69,8 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
             onClick={onStartOrder}
             className="w-full sm:w-auto"
           >
-            Book Your Fitting Slot Now
+            <Calendar className="w-5 h-5" />
+            Book Your Slot Now
           </Button>
           
           <Button 

@@ -60,7 +60,7 @@ export const HowItWorks = () => {
             <div className="w-full lg:w-[65%] flex flex-col items-center">
               
               {/* Clickable Icon Blobs Row */}
-              <div className="flex justify-center items-center gap-16 mb-10 w-full max-w-md">
+              <div className="flex justify-center items-center gap-10 mb-10 w-full max-w-md">
                 {steps.map((step, index) => (
                   <button
                     key={index}
@@ -70,8 +70,8 @@ export const HowItWorks = () => {
                     }`}
                     aria-label={`View ${step.title}`}
                     style={{
-                      width: '110px',
-                      height: '110px',
+                      width: '100px',
+                      height: '100px',
                     }}
                   >
                     <div
