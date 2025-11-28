@@ -29,13 +29,13 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${heroBackground})` }}
       >
-        <div className="absolute inset-0" style={{ background: 'var(--gradient-section-blue-in)' }} />
+        <div className="absolute inset-0" style={{ background: 'var(--gradient-section-blue-in-hero)' }} />
       </div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-16 text-center animate-fade-in">
         {/* Trust Badge */}
-        <div className="inline-flex items-center gap-2 bg-accent/20 backdrop-blur-sm border border-accent/30 rounded-full px-4 py-2 mb-6">
+        <div className="inline-flex items-center gap-2 bg-white/30 backdrop-blur-sm border border-white/40 rounded-full px-4 py-2 mb-6">
           <Sparkles className="w-4 h-4 text-accent" />
           <span className="text-sm text-accent font-medium">Trusted by 500+ Customers in Ranchi </span>
         </div>
@@ -53,11 +53,11 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         </h1>
 
         {/* Subheading */}
-        <p className="text-xl md:text-2xl text-primary-foreground/100 mb-3 max-w-2xl mx-auto font-medium">
+        <p className="text-xl md:text-2xl text-white/100 mb-3 max-w-2xl mx-auto font-medium">
           Custom Stitching for Men & Women.
         </p>
         
-        <p className="text-lg text-primary-foreground/90 mb-8 max-w-xl mx-auto">
+        <p className="text-lg text-white/100 mb-8 max-w-xl mx-auto">
           From Design → Stitch → Doorstep Delivery
         </p>
 
@@ -87,15 +87,15 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         <div className="mt-12 flex flex-wrap justify-center gap-6 text-primary-foreground/80">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-accent" />
-            <span className="text-sm">24-Hour Delivery</span>
+            <span className="text-20px text-white">24-Hour Delivery</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-accent" />
-            <span className="text-sm">Pickup & Drop Available</span>
+            <span className="text-20px text-white">Pickup & Drop Available</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-accent" />
-            <span className="text-sm">Premium Quality</span>
+            <span className="text-20px text-white">Premium Quality</span>
           </div>
         </div>
       </div>

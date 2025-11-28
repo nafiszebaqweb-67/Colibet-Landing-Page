@@ -48,6 +48,7 @@ All colors MUST be HSL.
     --gradient-gold: linear-gradient(135deg, hsl(48 100% 55%), hsl(48 100% 65%));
     
     /* Section Gradients - Blue */
+    --gradient-section-blue-in-hero: linear-gradient(180deg, hsl(200deg 100% 83% / 1%) 0%, hsl(200deg 85% 75% / 73%) 50%, hsl(200deg 85% 60%) 100%);
     --gradient-section-blue-in: linear-gradient(180deg, hsl(200deg 100% 83% / 1%) 0%, hsl(200deg 85% 75% / 6%) 30%, hsl(200deg 85% 60%) 100%);
     --gradient-section-blue-out: linear-gradient(180deg, hsl(200 85% 60%) 0%, hsl(200 85% 75% / 0.3) 70%, hsl(200 85% 85% / 0) 100%);
     --gradient-section-blue-in-out: linear-gradient(180deg, hsl(200 85% 85% / 0) 0%, hsl(200 85% 70% / 0.5) 20%, hsl(200 85% 60% / 0.65) 50%, hsl(200 85% 70% / 0.5) 80%, hsl(200 85% 85% / 0) 100%);
@@ -58,8 +59,8 @@ All colors MUST be HSL.
     --gradient-section-yellow-in-out: linear-gradient(180deg, hsl(48 100% 85% / 0) 0%, hsl(48 100% 70% / 0.3) 20%, hsl(48 100% 65% / 0.5) 50%, hsl(48 100% 70% / 0.3) 80%, hsl(48 100% 85% / 0) 100%);
 
     /* Shadows - Professional with Two-Layer Approach */
-    --shadow-elegant: 0 4px 20px -4px hsl(200 95% 50% / 0.15), 0 2px 6px -2px hsl(200 95% 50% / 0.1);
-    --shadow-hover: 0 8px 30px -6px hsl(200 95% 50% / 0.25), 0 4px 10px -3px hsl(200 95% 50% / 0.15);
+    --shadow-elegant: 0 4px 20px -4px hsla(200, 100%, 14%, 0.433), 0 2px 6px -2px hsla(200, 100%, 28%, 0.384);
+    --shadow-hover: 0 8px 30px -6px hsla(0, 0%, 0%, 0.25), 0 4px 10px -3px hsla(0, 0%, 0%, 0.15);
     --shadow-gold: 0 4px 20px -4px hsl(48 100% 55% / 0.3), 0 2px 6px -2px hsl(48 100% 55% / 0.2);
     --shadow-card: 0 8px 24px -8px hsl(0 0% 0% / 0.08), 0 2px 4px -1px hsl(0 0% 0% / 0.06);
     --shadow-card-hover: 0 12px 32px -8px hsl(0 0% 0% / 0.12), 0 4px 8px -2px hsl(0 0% 0% / 0.08);
