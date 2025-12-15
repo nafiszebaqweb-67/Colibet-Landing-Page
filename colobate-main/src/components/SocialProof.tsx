@@ -59,12 +59,12 @@ export const SocialProof = () => {
     <section className="py-20" style={{ background: 'var(--gradient-section-blue-out)' }}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-fade-in">
-          <div className="inline-block bg-accent/10 rounded-full px-6 py-2 mb-4">
-            <p className="text-accent font-semibold">⭐ Trusted in Ranchi</p>
+         <div className="inline-block bg-blue-100 rounded-full px-6 py-2 mb-4">
+         <p className="text-blue-950 font-semibold">⭐ Trusted in Ranchi</p>
           </div>
-          <h2 className="font-heading text-4xl md:text-5xl text-accent mb-4">
-            Loved by 500+ Ranchi Clients
-          </h2>
+           <h2 className="font-heading text-4xl md:text-5xl text-blue-900 mb-4">
+            Loved by 5000+ Ranchi Clients
+            </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             The Best Custom Stitching Experience in Ranchi.
           </p>
@@ -123,7 +123,7 @@ export const SocialProof = () => {
         {/* Social Proof Stats */}
         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
           {[
-            { number: "500+", label: "Happy Customers" },
+            { number: "5000+", label: "Happy Customers" },
             { number: "24hr", label: "Delivery Promise" },
             { number: "4.5★", label: "Average Rating" },
             { number: "100%", label: "Quality Guaranteed" },

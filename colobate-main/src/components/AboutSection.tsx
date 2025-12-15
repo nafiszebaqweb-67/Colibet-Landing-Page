@@ -5,7 +5,9 @@ import featurePickupDrop from "@/assets/feature-pickup-drop.jpeg";
 import featureLocalExperts from "@/assets/feature-local-experts.jpeg";
 import featurePremiumQuality from "@/assets/feature-premium-quality.jpeg";
 import featureTrustedCustomers from "@/assets/feature-trusted-customers.jpeg";
-
+import doorstep from "@/assets/doorstep.jpg";
+import quality from "@/assets/cloth_quality.jpeg";
+import trusted from "@/assets/trusted2.jpeg";
 export const AboutSection = () => {
   const features = [
     { 
@@ -19,17 +21,17 @@ export const AboutSection = () => {
       description: "Need it fast? Get your custom stitch ready in 24 hours with our priority express service."
     },
     { 
-      image: featurePickupDrop, 
+      image: doorstep, 
       text: "Convenient Doorstep Service",
       description: "Free pickup of fabric and final delivery of your stitched outfit right to your Ranchi location."
     },
     { 
-      image: featureLocalExperts, 
+      image: trusted, 
       text: "Trusted Local Master Tailors",
       description: "Serving the Ranchi community for years. Get perfect fitting from your neighborhood's most trusted tailors."
     },
     { 
-      image: featurePremiumQuality, 
+      image: quality, 
       text: "Guaranteed Premium Quality",
       description: "We use high-grade thread and precision techniques to ensure every stitch is durable and flawless."
     },

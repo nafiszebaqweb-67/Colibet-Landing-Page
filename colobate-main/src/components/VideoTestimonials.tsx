@@ -89,22 +89,22 @@ export const VideoTestimonials = () => {
   const testimonials: VideoTestimonial[] = [
     {
       id: "1",
-      videoUrl: "/video/3682815-hd_1080_2048_25fps.mp4", // Local video file
+      videoUrl: "/video/stiching_process.mp4", // Local video file
       caption: "Meet Our Founder & Learn Our Tailoring Process",
     },
     {
       id: "2",
-      videoUrl: "https://www.youtube.com/shorts/BGZ_5weRQk4", // YouTube URL example
+      videoUrl: "/video/perfect_measurement.mp4", // YouTube URL example
       caption: "Online Stitching? See How We Take Perfect Measurements ",
     },
     {
       id: "3",
-      videoUrl: "https://www.youtube.com/shorts/pjqYqV3cAOw", // Local video file
+      videoUrl: "/video/quality.mp4", // Local video file
       caption: "Ranchi Service Areas: We Deliver Quality Tailoring to Your Doorstep ",
     },
     {
       id: "4",
-      videoUrl: "/video/3894725-hd_1080_2048_25fps.mp4", // Local video file
+      videoUrl: "/video/custome_outfit.mp4", // Local video file
       caption: "Fast Delivery Options: Get Your Custom Outfit Sooner ",
     },
   ];

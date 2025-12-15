@@ -8,20 +8,23 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { toast } from "sonner";
 
 // Import category images
-import menImage from "@/assets/men-category.jpg";
-import womenImage from "@/assets/women-category.jpg";
-import kidsImage from "@/assets/kids-category.jpg";
+import menImage from "@/assets/mens_section.jpeg";
+import womenImage from "@/assets/woman_section.jpeg";
+import kidsImage from "@/assets/kid_section.jpeg";
 
 // Import garment images
-import shirtImage from "@/assets/shirt-garment.jpg";
+import shirtImage from "@/assets/menshirt.jpeg";
 import pantImage from "@/assets/pant-garment.jpg";
-import kurtaImage from "@/assets/kurta-garment.jpg";
+import kurtaImage from "@/assets/menkurta.jpeg";
 import blazerImage from "@/assets/blazer-garment.jpg";
 import kurtiImage from "@/assets/kurti-garment.jpg";
 import blouseImage from "@/assets/blouse-garment.jpg";
-import lehengaImage from "@/assets/lehenga-garment.jpg";
-import suitImage from "@/assets/suit-garment.jpg";
-import frockImage from "@/assets/frock-garment.jpg";
+import lehengaImage from "@/assets/lehenga_section.jpeg";
+import suitImage from "@/assets/suit_section.jpeg";
+import frockImage from "@/assets/frock_section.jpeg";
+import kidpant from "@/assets/kidpant_section.jpeg";
+import kidshirt from "@/assets/kidshirt_section.jpeg";
+
 
 type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
@@ -86,8 +89,8 @@ const GARMENTS_BY_CATEGORY: GarmentsByCategory = {
   ],
   Kids: [
     { name: "Frock", icon: "👧", image: frockImage },
-    { name: "Pant", icon: "👖", image: pantImage },
-    { name: "Shirt", icon: "👕", image: shirtImage },
+    { name: "Pant", icon: "👖", image: kidpant },
+    { name: "Shirt", icon: "👕", image: kidshirt },
   ],
 };
 
