@@ -1,13 +1,16 @@
 import { useRef } from "react";
 import { Hero } from "@/components/Hero";
 import { OrderFunnel } from "@/components/OrderFunnel";
-import { HowItWorks } from "@/components/HowItWorks";
+import HowItWorks from "@/components/HowItWorks";
+
 import { SocialProof } from "@/components/SocialProof";
 import { VideoTestimonials } from "@/components/VideoTestimonials";
 import { OfferSection } from "@/components/OfferSection";
 import { AboutSection } from "@/components/AboutSection";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+
+
 
 const Index = () => {
   const orderSectionRef = useRef<HTMLDivElement>(null);
