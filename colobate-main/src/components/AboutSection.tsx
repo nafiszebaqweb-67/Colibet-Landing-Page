@@ -4,10 +4,10 @@ import featureFastDelivery from "@/assets/feature-fast-delivery.jpeg";
 import featurePickupDrop from "@/assets/feature-pickup-drop.jpeg";
 import featureLocalExperts from "@/assets/feature-local-experts.jpeg";
 import featurePremiumQuality from "@/assets/feature-premium-quality.jpeg";
-import featureTrustedCustomers from "@/assets/feature-trusted-customers.jpeg";
+import featureTrustedCustomers from "@/assets/top.jpeg";
 import doorstep from "@/assets/doorstep.jpg";
 import quality from "@/assets/cloth_quality.jpeg";
-import trusted from "@/assets/trusted2.jpeg";
+import trusted from "@/assets/local.jpeg";
 export const AboutSection = () => {
   const features = [
     { 

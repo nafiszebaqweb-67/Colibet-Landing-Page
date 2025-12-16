@@ -1,168 +1,151 @@
 import { useState } from "react";
+
 import step1Image from "@/assets/step-1.png";
 import step2Image from "@/assets/step-2.png";
 import step3Image from "@/assets/step-3.png";
+
 import stepLarge1Image from "@/assets/step-large-1.png";
 import stepLarge2Image from "@/assets/step-large-2.png";
-import stepLarge3Image from "@/assets/step-large-3.png";
+import stepLarge3Image from "@/assets/3rdstep.jpeg";
 
-export const HowItWorks = () => {
-  const [activeStep, setActiveStep] = useState<number>(0);
+export function HowItWorks() {
+  const [activeStep, setActiveStep] = useState(0);
 
   const steps = [
     {
-      number: "1",
-      image: step1Image,
-      largeImage: stepLarge1Image,
-      title: "Design & Style Consultation",
-      description: "Share your fabric & style preferences with our design experts for a perfect look.",
+      title: "01. Design & Consultation",
+      description:
+        "Share your fabric & style preferences with our design experts for a perfect look.",
+      icon: step1Image,
+      image: stepLarge1Image,
     },
     {
-      number: "2",
-      image: step2Image,
-      largeImage: stepLarge2Image,
-      title: "We Stitch It Custom",
-      description: "Our expert tailors craft your perfect fit with precision and care.",
+      title: "02. Custom Stitching",
+      description:
+        "Our skilled tailors craft your garment with meticulous attention to detail and fit.",
+      icon: step2Image,
+      image: stepLarge2Image,
     },
     {
-      number: "3",
-      image: step3Image,
-      largeImage: stepLarge3Image,
-      title: "Delivered in 24 Hours",
-      description: "Straight to your doorstep in Ranchi. Fast, reliable, premium quality.",
+      title: "03. Doorstep Delivery",
+      description:
+        "Your custom-fitted garment is delivered right to your door, ready to wear.",
+      icon: step3Image,
+      image: stepLarge3Image,
     },
   ];
 
-  const handleIconClick = (index: number) => {
-    setActiveStep(index);
-  };
-
   return (
-    <section className="py-20" style={{ background: 'var(--gradient-section-blue-in)' }}>
+    <section
+      className="py-24"
+      style={{ background: "var(--gradient-section-blue-in)" }}
+    >
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in">
-          <div className="inline-block bg-accent/20 backdrop-blur-sm border border-accent/30 rounded-full px-6 py-2 mb-4">
-            <p className="text-accent font-semibold">🪜 Simple Steps</p>
-          </div>
-          <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
-            Seamless Custom Tailoring in 3 Steps
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            From design to delivery, we make your custom fit effortless.
-          </p>
-        </div>
+        {/* Heading */}
+        <h2 className="text-center text-4xl md:text-5xl font-bold mb-20">
+          Our Simple 3-Step Process
+        </h2>
 
-        {/* Main Layout - Matching Reference Structure */}
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 items-start justify-between">
-            
-            {/* Left Side: Icons, Timeline & Content (Vertical Stack) */}
-            <div className="w-full lg:w-[65%] flex flex-col items-center">
-              
-              {/* Clickable Icon Blobs Row */}
-              <div className="flex justify-center items-center gap-10 mb-10 w-full max-w-md">
-                {steps.map((step, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleIconClick(index)}
-                    className={`relative flex-shrink-0 transition-all duration-500 ease-out hover:scale-105 focus:outline-none ${
-                      activeStep === index ? 'scale-110' : 'scale-100'
-                    }`}
-                    aria-label={`View ${step.title}`}
-                    style={{
-                      width: '100px',
-                      height: '100px',
-                    }}
-                  >
-                    <div
-                      className={`w-full h-full flex items-center justify-center transition-all duration-500 ${
-                        activeStep === index
-                          ? 'bg-primary shadow-[0_10px_40px_rgba(0,180,220,0.35)]'
-                          : 'bg-muted/50 shadow-md hover:shadow-lg'
-                      }`}
-                      style={{
-                        borderRadius: index === 0 
-                          ? '50% 50% 50% 50% / 60% 60% 40% 40%'
-                          : index === 1
-                          ? '60% 40% 50% 50% / 50% 60% 40% 50%'
-                          : '50% 50% 60% 40% / 50% 50% 50% 50%',
-                      }}
-                    >
-                      <img 
-                        src={step.image} 
-                        alt={step.title}
-                        className={`w-16 h-16 object-contain transition-all duration-500 ${
-                          activeStep === index ? 'brightness-0 invert scale-110' : 'opacity-60'
-                        }`}
-                      />
-                    </div>
-                  </button>
-                ))}
-              </div>
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {steps.map((step, index) => (
+            <div
+              key={index}
+              onMouseEnter={() => setActiveStep(index)}
+              className="group relative"
+            >
+              {/* Glow Border */}
+              <div
+                className="
+                  absolute inset-0 rounded-3xl
+                  bg-gradient-to-br
+                  from-sky-400/40 via-blue-300/20 to-transparent
+                  opacity-0 group-hover:opacity-100
+                  blur-xl transition duration-500
+                "
+              />
 
-              {/* Timeline with Number Circle on Left */}
-              <div className="flex items-center gap-6 mb-10 w-full max-w-md">
-                {/* Large Number Circle - Fixed on Left */}
-                <div className="flex-shrink-0">
-                  <div className="w-16 h-16 sm:w-15 sm:h-15 rounded-full bg-primary flex items-center justify-center shadow-[0_8px_30px_rgba(0,180,220,0.4)] ring-4 ring-primary/10 transition-all duration-500">
-                    <span className="text-white font-heading text-2xl sm:text-3xl font-bold">
-                      {activeStep + 1}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Timeline Line with Dots */}
-                <div className="relative flex-1 h-1">
-                  <div className="absolute inset-0 bg-primary/20 rounded-full" />
-                  <div 
-                    className="absolute top-0 left-0 h-full bg-primary rounded-full transition-all duration-700 ease-in-out"
-                    style={{
-                      width: `${(activeStep / (steps.length - 1)) * 100}%`,
-                    }}
-                  />
-                  <div className="absolute inset-0 flex justify-between items-center px-0">
-                    {steps.map((_, index) => (
-                      <div
-                        key={index}
-                        className={`w-4 h-4 rounded-full transition-all duration-500 ${
-                          index <= activeStep ? 'bg-primary scale-125 shadow-md' : 'bg-primary/30'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Content Text Below Timeline */}
-              <div className="space-y-3 w-full max-w-md">
-                <h3 className="font-heading text-3xl sm:text-4xl text-white text-foreground font-bold tracking-tight leading-tight transition-all duration-500">
-                  {steps[activeStep].title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed text-white/90 text-base sm:text-lg transition-all duration-500">
-                  {steps[activeStep].description}
-                </p>
-              </div>
-            </div>
-
-            {/* Right Side: Large Circular Icon Badge */}
-            <div className="w-full lg:w-[40%] flex justify-center lg:justify-start">
-              <div 
-                className="w-72 h-72 sm:w-80 sm:h-80 lg:w-[22rem] lg:h-[22rem] bg-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 ease-out overflow-hidden"
-                key={activeStep}
+              {/* Card */}
+              <div
+                className="
+                  relative z-10 h-full
+                  rounded-3xl p-10 text-center
+                  bg-[linear-gradient(180deg,#ffffff_0%,#f8fcff_55%,#eef8ff_100%)]
+                  shadow-[0_20px_60px_rgba(0,0,0,0.12)]
+                  transition-all duration-500 ease-out
+                  group-hover:-translate-y-4
+                  group-hover:shadow-[0_40px_90px_rgba(0,120,255,0.35)]
+                "
               >
-                <div className="w-full h-full flex items-center justify-center p-8">
-                  <img 
-                    src={steps[activeStep].largeImage}
-                    alt={steps[activeStep].title}
-                    className="w-full h-full object-cover rounded-full animate-fade-in"
+                {/* Icon */}
+                <div
+                  className="
+                    w-16 h-16 mx-auto mb-6 rounded-full
+                    bg-gradient-to-br from-sky-100 to-blue-200
+                    flex items-center justify-center
+                    shadow-inner
+                    transition-all duration-500
+                    group-hover:from-blue-500 group-hover:to-sky-500
+                    group-hover:scale-110
+                  "
+                >
+                  <img
+                    src={step.icon}
+                    alt={step.title}
+                    className="
+                      w-8 h-8 transition duration-500
+                      group-hover:brightness-0 group-hover:invert
+                    "
+                  />
+                </div>
+
+                {/* Title */}
+                <h3
+                  className="
+                    text-xl font-semibold mb-4
+                    transition-colors duration-500
+                    group-hover:text-blue-600
+                  "
+                >
+                  {step.title}
+                </h3>
+
+                {/* Description */}
+                <p
+                  className="
+                    text-gray-600 mb-10 leading-relaxed
+                    transition-colors duration-500
+                    group-hover:text-gray-800
+                  "
+                >
+                  {step.description}
+                </p>
+
+                {/* Image */}
+                <div
+                  className="
+                    w-44 h-44 mx-auto rounded-full overflow-hidden
+                    ring-4 ring-white
+                    shadow-[0_15px_40px_rgba(0,0,0,0.25)]
+                    transition-all duration-700
+                    group-hover:shadow-[0_30px_80px_rgba(0,120,255,0.45)]
+                  "
+                >
+                  <img
+                    src={step.image}
+                    alt={step.title}
+                    className="
+                      w-full h-full object-cover
+                      transition-transform duration-700 ease-out
+                      group-hover:scale-110
+                    "
                   />
                 </div>
               </div>
             </div>
-
-          </div>
+          ))}
         </div>
       </div>
     </section>
   );
-};
+}

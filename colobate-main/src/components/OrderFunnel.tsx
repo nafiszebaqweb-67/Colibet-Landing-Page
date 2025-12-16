@@ -8,9 +8,9 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { toast } from "sonner";
 
 // Import category images
-import menImage from "@/assets/mens_section.jpeg";
-import womenImage from "@/assets/woman_section.jpeg";
-import kidsImage from "@/assets/kid_section.jpeg";
+import menImage from "@/assets/men100.jpeg";
+import womenImage from "@/assets/woman100.jpeg";
+import kidsImage from "@/assets/kid100.jpeg";
 
 // Import garment images
 import shirtImage from "@/assets/menshirt.jpeg";
