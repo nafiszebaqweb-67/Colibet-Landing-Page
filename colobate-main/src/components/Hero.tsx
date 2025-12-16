@@ -41,16 +41,31 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         </div>
 
         {/* Main Heading */}
-        <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl text-primary-foreground mb-20 leading-tight">
-          Ranchi's Fastest Custom Tailor<span className="relative inline-block">
-            <span className={`text-gradient-gold transition-opacity duration-1000 leading-[1.5] ${showHindi ? 'opacity-0 absolute inset-0' : 'opacity-100'}`}>
-              Designed, Stitched & Delivered
-            </span>
-            <span className={`text-gradient-gold transition-opacity duration-1000 leading-[1.5] ${showHindi ? 'opacity-100' : 'opacity-0 absolute inset-0'}`}>
-              परिकल्पित, सीवनित और वितरित
-            </span>
-          </span> <br></br>in 24 Hours.
-        </h1>
+  <h1 className="font-heading text-4xl md:text-6xl lg:text-7xl text-primary-foreground mb-20 leading-tight">
+  Colibet Doorstep Tailoring Service
+  <span className="relative inline-block">
+    <span
+      className={`text-gradient-gold transition-opacity duration-1000 leading-[1.5] ${
+        showHindi ? "opacity-0 absolute inset-0" : "opacity-100"
+      }`}
+    >
+      Designed, Stitched & Delivered
+    </span>
+
+    <span
+      className={`text-gradient-gold transition-opacity duration-1000 leading-[1.5] ${
+        showHindi ? "opacity-100" : "opacity-0 absolute inset-0"
+      }`}
+    >
+      परिकल्पित, सीवनित और वितरित
+    </span>
+  </span>
+  <br />
+  in 24 Hours.
+</h1>
+
+
+
 
         {/* Subheading */}
         <p className="text-xl md:text-2xl text-white/100 mb-3 max-w-2xl mx-auto font-medium">

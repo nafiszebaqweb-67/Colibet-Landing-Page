@@ -31,11 +31,60 @@ export const Footer = () => {
           <div>
             <h4 className="font-heading text-lg mb-4 text-accent">Our Services</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li>• Men's Tailoring</li>
-              <li>• Women's Tailoring</li>
-              <li>• Suit & Blazer Stitching</li>
-              <li>• Dress & Lehenga</li>
-              <li>• Alteration Services</li>
+              <li>
+                 <a
+                      href="https://collibet.com/category-details?category=best-men-tailor"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                     className="hover:text-accent transition"
+                    >
+                    • Men's Tailoring
+                  </a>
+                </li>
+
+              <li>
+                      <a
+                       href="https://collibet.com/category-details?categoryId=6532afc5e9df1a5d764695d9"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                       className="hover:text-accent transition"
+                         >
+                            • Women's Saree
+                       </a>
+                </li>
+
+              <li>
+                     <a
+                      href="https://collibet.com/category-details?category=best-ladies-tailoring"
+                         target="_blank"
+                          rel="noopener noreferrer"
+                            className="hover:text-accent transition"
+                            >
+                         •  Woemen's Suit Stitching
+                         </a>
+                  </li>
+                  <li>
+                     <a
+                      href="https://collibet.com/category-details?category=best-ladies-tailoring"
+                         target="_blank"
+                          rel="noopener noreferrer"
+                            className="hover:text-accent transition"
+                            >
+                         • Lehenga Stiching
+                         </a>
+                  </li>
+                  <li>
+                     <a
+                      href="https://collibet.com/category-details?category=designer-blouse-tailoring"
+                         target="_blank"
+                          rel="noopener noreferrer"
+                            className="hover:text-accent transition"
+                            >
+                         • Alteration Services
+                         </a>
+                  </li>
+
+
               <li>• Pickup & Delivery</li>
             </ul>
           </div>
