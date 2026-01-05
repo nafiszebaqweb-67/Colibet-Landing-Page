@@ -39,30 +39,6 @@ export async function getOrdersByStatus(status?: string) {
     }
 }
 
-export async function getUsers() {
-    const url = `${BASE_URL}/api/admin/users`;
-    try {
-        const res = await fetch(url, {
-            headers: {
-                "Content-Type": "application/json",
-                ...getAuthHeaders(),
-            },
-        });
-
-        if (!res.ok) {
-            const error = await res.text();
-            console.error("❌ Server error fetching users:", res.status, error);
-            throw new Error(`Failed to fetch users: ${res.status} ${error}`);
-        }
-
-        const data = await res.json();
-        return data.users || [];
-    } catch (err) {
-        console.error("❌ Error fetching users from server:", err);
-        throw err;
-    }
-}
-
 export async function updateOrderStatus(orderId: string, status: "new" | "progress" | "completed" | "cancelled") {
     const res = await fetch(`${BASE_URL}/api/admin/orders/${encodeURIComponent(orderId)}/status`, {
         method: "PATCH",

@@ -326,26 +326,6 @@ app.get("/api/admin/orders", authenticateAdmin, async (req, res) => {
     }
 });
 
-// Admin: fetch customers (users) with order counts and total spent
-app.get("/api/admin/users", authenticateAdmin, async (req, res) => {
-    try {
-        const query = `SELECT c.id, c.name, c.whatsapp_number, c.created_at,
-            COUNT(o.id) AS orders_count,
-            COALESCE(SUM(o.amount), 0) AS total_spent
-            FROM customers c
-            LEFT JOIN orders o ON o.customer_id = c.id
-            GROUP BY c.id
-            ORDER BY c.created_at DESC
-            LIMIT 500`;
-
-        const [rows] = await pool.query(query);
-        return res.json({ users: rows || [] });
-    } catch (err) {
-        console.error("❌ Failed to fetch users for admin:", err);
-        return res.status(500).json({ error: err?.message || String(err) });
-    }
-});
-
 // Update order status endpoint
 app.patch("/api/admin/orders/:id/status", authenticateAdmin, async (req, res) => {
     const orderId = req.params.id;
