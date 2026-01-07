@@ -17,14 +17,14 @@ export const SocialProof = () => {
       location: "Harmu, Ranchi",
       rating: 5,
       text: "Perfect fitting! Got my suit stitched overnight for an important meeting. The quality is outstanding!",
-      image: "/src/assets/men-category.jpg",
+      image: "",
     },
     {
       name: "Priya Sharma",
       location: "Lalpur, Ranchi",
       rating: 5,
       text: "Blouse delivered next day — unbelievable speed! The stitching is flawless and the fit is perfect.",
-      image: "/src/assets/women-category.jpg",
+      image: "",
     },
     {
       name: "Amit Kumar",
