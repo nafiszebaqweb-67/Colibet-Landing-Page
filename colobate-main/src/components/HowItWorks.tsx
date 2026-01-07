@@ -6,8 +6,8 @@ import step1Image from "@/assets/step-1.png";
 import step2Image from "@/assets/step-2.png";
 import step3Image from "@/assets/step-3.png";
 
-import stepLarge1Image from "@/assets/step-large-1.png";
-import stepLarge2Image from "@/assets/step-large-2.png";
+import stepLarge1Image from "@/assets/design.jpeg";
+import stepLarge2Image from "@/assets/stiching.jpeg";
 import stepLarge3Image from "@/assets/3rdstep.jpeg";
 
 export default function HowItWorks() {
