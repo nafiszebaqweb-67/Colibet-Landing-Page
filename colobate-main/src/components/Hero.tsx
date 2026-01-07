@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Sparkles, Calendar } from "lucide-react";
-import heroBackground from "@/assets/ColibateHero.png";
+import heroBackground from "@/assets/banner.jpeg";
 
 interface HeroProps {
   onStartOrder: () => void;
