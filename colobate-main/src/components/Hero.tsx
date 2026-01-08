@@ -52,7 +52,7 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         </div>
 
         {/* Main Heading */}
-        <h1 className="font-medium text-[4rem] text-primary-foreground mb-12 leading-tight">
+        <h1 className="font-medium text-[4.5rem] text-primary-foreground mb-12 leading-tight">
           Colibet Doorstep Tailoring Service
           <span className="relative inline-block">
             <span
