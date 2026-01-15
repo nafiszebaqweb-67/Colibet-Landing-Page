@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
 // Load environment variables
 dotenv.config();
@@ -175,6 +176,53 @@ app.post("/api/orders", async (req, res) => {
         }
 
         await conn.commit();
+
+        // Send one notification email to the configured admin address
+        const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || process.env.ADMIN_EMAIL || null;
+        if (adminEmail) {
+            // Configure transporter from SMTP env vars
+            const transporter = nodemailer.createTransport({
+                host: process.env.SMTP_HOST,
+                port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587,
+                secure: process.env.SMTP_SECURE === "true", // true for 465
+                auth: process.env.SMTP_USER ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } : undefined,
+            });
+
+            const subject = `New Order Received — #${orderId}`;
+            const htmlParts = [];
+            htmlParts.push(`<h2>New Order — ID ${orderId}</h2>`);
+            htmlParts.push(`<p><strong>Name:</strong> ${payload.fullName || "-"}</p>`);
+            htmlParts.push(`<p><strong>WhatsApp:</strong> ${payload.whatsappNumber || "-"}</p>`);
+            htmlParts.push(`<p><strong>Category:</strong> ${payload.category || "-"}</p>`);
+            htmlParts.push(`<p><strong>Garment:</strong> ${payload.garment || "-"}</p>`);
+            htmlParts.push(`<p><strong>Fabric Type:</strong> ${payload.fabricType || "-"}</p>`);
+            htmlParts.push(`<p><strong>Measurement Type:</strong> ${payload.measurementType || "-"}</p>`);
+            htmlParts.push(`<p><strong>Pickup:</strong> ${payload.pickupDate || "-"} &mdash; <strong>Delivery:</strong> ${payload.deliveryDate || "-"}</p>`);
+            htmlParts.push(`<p><strong>Address:</strong> ${payload.fullAddress || "-"}, ${payload.city || "-"} (${payload.pincode || "-"})</p>`);
+            htmlParts.push(`<p><strong>Special Instructions:</strong> ${payload.specialInstructions || "-"}</p>`);
+            if (Array.isArray(payload.files) && payload.files.length) {
+                htmlParts.push(`<h3>Files</h3><ul>`);
+                for (const f of payload.files) {
+                    htmlParts.push(`<li>${f.name || f.url || "file"} (${f.type || "-"}) - ${f.url || "-"}</li>`);
+                }
+                htmlParts.push(`</ul>`);
+            }
+
+            try {
+                await transporter.sendMail({
+                    from: process.env.SMTP_FROM || `no-reply@${process.env.SMTP_HOST || "example.com"}`,
+                    to: adminEmail,
+                    subject,
+                    html: htmlParts.join("\n"),
+                });
+                console.log(`📧 Sent order notification to ${adminEmail} for order ${orderId}`);
+            } catch (err) {
+                console.error("❌ Failed to send order notification email:", err);
+            }
+        } else {
+            console.warn("⚠️ ADMIN_NOTIFICATION_EMAIL not set; skipping admin email");
+        }
+
         return res.status(201).json({ ok: true, orderId });
     } catch (err) {
         await conn.rollback();
