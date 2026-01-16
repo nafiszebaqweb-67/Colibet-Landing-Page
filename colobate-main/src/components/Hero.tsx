@@ -26,7 +26,7 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-start">
+    <section className="relative min-h-[70vh] md:min-h-screen flex flex-col justify-start">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
@@ -42,28 +42,28 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 pt-20 pb-12 text-center animate-fade-in">
+      <div className="relative z-10 container mx-auto px-4 pt-16 md:pt-20 pb-10 md:pb-12 text-center animate-fade-in">
         {/* Trust Badge */}
-        <div className="inline-flex items-center gap-2 bg-white/30 backdrop-blur-sm border border-white/40 rounded-full px-4 py-2 mb-6">
+        <div className="inline-flex items-center gap-2 bg-white/30 backdrop-blur-sm border border-white/40 rounded-full px-3 py-1.5 mb-6">
           <Sparkles className="w-4 h-4 text-accent" />
-          <span className="text-sm text-accent font-medium">
+          <span className="text-xs sm:text-sm text-accent font-medium">
             Trusted by 5000+ Customers in Ranchi
           </span>
         </div>
 
         {/* Main Heading */}
-        <h1 className="font-medium text-[4.5rem] text-primary-foreground mb-12 leading-tight">
+        <h1 className="font-medium text-3xl sm:text-4xl md:text-5xl lg:text-[4.5rem] text-primary-foreground mb-8 md:mb-12 leading-tight">
           Colibet Doorstep Tailoring Service
           <span className="relative inline-block">
             <span
-              className={`text-gradient-gold transition-opacity duration-1000 leading-[1.5] ${
+              className={`text-gradient-gold transition-opacity duration-1000 leading-[1.2] ${
                 showHindi ? "opacity-0 absolute inset-0" : "opacity-100"
               }`}
             >
               Designed, Stitched & Delivered
             </span>
             <span
-              className={`text-gradient-gold transition-opacity duration-1000 leading-[1.5] ${
+              className={`text-gradient-gold transition-opacity duration-1000 leading-[1.2] ${
                 showHindi ? "opacity-100" : "opacity-0 absolute inset-0"
               }`}
             >
@@ -75,16 +75,15 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         </h1>
 
         {/* Subheading */}
-        <p className="text-xl md:text-2xl text-white mb-3 max-w-2xl mx-auto font-medium">
+        <p className="text-lg md:text-xl text-white mb-3 max-w-2xl mx-auto font-medium">
           Custom Stitching for Men & Women.
         </p>
-
-        <p className="text-lg text-white mb-8 max-w-xl mx-auto">
+        <p className="text-base md:text-lg text-white mb-8 max-w-xl mx-auto">
           From Design → Stitch → Doorstep Delivery
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto mb-12">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full max-w-md mx-auto mb-8 md:mb-12">
           <Button
             variant="gold"
             size="xl"
@@ -107,7 +106,7 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         </div>
 
         {/* Features Quick Highlight */}
-        <div className="mt-6 flex flex-wrap justify-center gap-6 text-white/90">
+        <div className="mt-6 flex flex-wrap justify-center gap-6 text-white/90 text-sm sm:text-base">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-accent" />
             <span className="text-lg md:text-xl">24-Hour Delivery</span>
