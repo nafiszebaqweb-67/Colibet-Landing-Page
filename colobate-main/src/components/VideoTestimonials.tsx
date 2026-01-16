@@ -90,22 +90,22 @@ export const VideoTestimonials = () => {
     {
       id: "1",
       videoUrl: "/video/stiching_process.mp4", // Local video file
-      caption: "Meet Our Founder & Learn Our Tailoring Process",
+      caption: "From Design to Stitch — Crafting Tailored Perfection",
     },
     {
       id: "2",
       videoUrl: "/video/perfect_measurement.mp4", // YouTube URL example
-      caption: "Online Stitching? See How We Take Perfect Measurements ",
+      caption: "Precise Measurements for a Perfect Fit",
     },
     {
       id: "3",
       videoUrl: "/video/quality.mp4", // Local video file
-      caption: "Ranchi Service Areas: We Deliver Quality Tailoring to Your Doorstep ",
+      caption: "Superior Quality. Flawless Fit.",
     },
     {
       id: "4",
       videoUrl: "/video/custome_outfit.mp4", // Local video file
-      caption: "Fast Delivery Options: Get Your Custom Outfit Sooner ",
+      caption: "Masters of Tailoring with Perfectly Finished Stitching ",
     },
   ];
 
