@@ -47,7 +47,7 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
         <div className="inline-flex items-center gap-2 bg-white/30 backdrop-blur-sm border border-white/40 rounded-full px-4 py-2 mb-6">
           <Sparkles className="w-4 h-4 text-accent" />
           <span className="text-sm text-accent font-medium">
-            Trusted by 500+ Customers in Ranchi
+            Trusted by 5000+ Customers in Ranchi
           </span>
         </div>
 
