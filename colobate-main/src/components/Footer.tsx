@@ -95,7 +95,7 @@ export const Footer = () => {
             <div className="space-y-3 text-sm text-primary-foreground/80">
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-accent" />
-                <p>123 Main Road, Ranchi, Jharkhand 834001</p>
+                <p>City Grocery Bazar, Near, Kadru Main Rd, Kadru, Ranchi, Jharkhand 834002</p>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-accent" />
