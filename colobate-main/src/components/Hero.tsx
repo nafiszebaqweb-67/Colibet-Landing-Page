@@ -53,7 +53,7 @@ export const Hero = ({ onStartOrder }: HeroProps) => {
 
         {/* Main Heading */}
         <h1 className="font-medium text-3xl sm:text-4xl md:text-5xl lg:text-[4.5rem] text-primary-foreground mb-8 md:mb-12 leading-tight">
-          Colibet Doorstep Tailoring Service
+          Collibet Doorstep Tailoring Service
           <span className="relative inline-block">
             <span
               className={`text-gradient-gold transition-opacity duration-1000 leading-[1.2] ${
