@@ -56,6 +56,7 @@ interface FormData {
   // Step 6: Contact Info
   fullName: string;
   whatsappNumber: string;
+  email: string;
 
 
   // Step 7: Address & Delivery
@@ -107,6 +108,7 @@ export const OrderFunnel = () => {
     measurementChart: null,
     fullName: "",
     whatsappNumber: "",
+    email: "",
     fullAddress: "",
     city: "",
     pincode: "",
@@ -151,26 +153,84 @@ export const OrderFunnel = () => {
         }
         return false;
       case 6:
-        return formData.fullName !== "" && formData.whatsappNumber !== "";
+        // Name required, whatsapp required and must be valid; email optional but if present must be valid
+        if (formData.fullName === "") return false;
+        if (validateWhatsApp(formData.whatsappNumber)) return false;
+        if (formData.email && validateEmail(formData.email)) return false;
+        return true;
       case 7:
-        return (
-          formData.fullAddress !== "" &&
-          formData.city !== "" &&
-          formData.pincode !== "" &&
-          formData.pickupDate !== "" &&
-          formData.deliveryDate !== ""
-        );
+        // Basic presence checks plus date validation
+        if (
+          formData.fullAddress === "" ||
+          formData.city === "" ||
+          formData.pincode === "" ||
+          formData.pickupDate === "" ||
+          formData.deliveryDate === ""
+        ) {
+          return false;
+        }
+        if (validateDates(formData.pickupDate, formData.deliveryDate)) return false;
+        return true;
       default:
         return false;
     }
   };
 
   const [isSaving, setIsSaving] = useState(false);
+  const [errors, setErrors] = useState<{ [k: string]: string }>({});
+
+  const validateEmail = (email: string) => {
+    if (!email) return ""; // optional
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email) ? "" : "Please enter a valid email address.";
+  };
+
+  const validateWhatsApp = (phone: string) => {
+    const v = (phone || "").toString().trim();
+    if (!v) return "WhatsApp number is required.";
+    // Accept Indian mobile numbers: optional +91, 91 or 0 prefix, then 10 digits starting with 6-9
+    const norm = v.replace(/[^0-9+]/g, "");
+    const re = /^(?:\+91|91|0)?[6-9][0-9]{9}$/;
+    return re.test(norm) ? "" : "Enter a valid Indian mobile number (10 digits, may prefix +91 or 0).";
+  };
+
+  const validateDates = (pickup: string, delivery: string) => {
+    if (!pickup || !delivery) return "Pickup and delivery dates are required.";
+    const p = new Date(pickup);
+    const d = new Date(delivery);
+    if (isNaN(p.getTime()) || isNaN(d.getTime())) return "Invalid date value.";
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (p < today) return "Pickup date cannot be in the past.";
+    if (d < p) return "Delivery date cannot be before pickup date.";
+    return "";
+  };
 
   const handleConfirmOrder = async () => {
+    // Final validation before submit
+    const waErr = validateWhatsApp(formData.whatsappNumber);
+    const emailErr = validateEmail(formData.email);
+    const dateErr = validateDates(formData.pickupDate, formData.deliveryDate);
+    if (waErr) {
+      setErrors((s) => ({ ...s, whatsappNumber: waErr }));
+      toast.error(waErr);
+      return;
+    }
+    if (emailErr) {
+      setErrors((s) => ({ ...s, email: emailErr }));
+      toast.error(emailErr);
+      return;
+    }
+    if (dateErr) {
+      setErrors((s) => ({ ...s, pickupDate: dateErr, deliveryDate: dateErr }));
+      toast.error(dateErr);
+      return;
+    }
+
     // Prepare payload matching server expectations. We send file names as metadata (no upload).
     const payload = {
       fullName: formData.fullName,
+      email: formData.email,
       whatsappNumber: formData.whatsappNumber,
       category: formData.category,
       garment: formData.garment,
@@ -594,13 +654,35 @@ export const OrderFunnel = () => {
                   type="tel"
                   placeholder="Enter WhatsApp number"
                   value={formData.whatsappNumber}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      whatsappNumber: e.target.value,
-                    })
-                  }
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setFormData({ ...formData, whatsappNumber: v });
+                    const err = validateWhatsApp(v);
+                    setErrors((s) => ({ ...s, whatsappNumber: err }));
+                  }}
                 />
+                {errors.whatsappNumber && (
+                  <p className="text-sm text-red-600 mt-1">{errors.whatsappNumber}</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Email (optional)
+                </label>
+                <Input
+                  type="email"
+                  placeholder="Enter email address"
+                  value={formData.email}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setFormData({ ...formData, email: v });
+                    const err = validateEmail(v);
+                    setErrors((s) => ({ ...s, email: err }));
+                  }}
+                />
+                {errors.email && (
+                  <p className="text-sm text-red-600 mt-1">{errors.email}</p>
+                )}
               </div>
               {/* Alternate number removed per request */}
             </div>
@@ -689,12 +771,12 @@ export const OrderFunnel = () => {
                   <Input
                     type="date"
                     value={formData.pickupDate}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        pickupDate: e.target.value,
-                      })
-                    }
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setFormData({ ...formData, pickupDate: v });
+                      const err = validateDates(v, formData.deliveryDate);
+                      setErrors((s) => ({ ...s, pickupDate: err }));
+                    }}
                   />
                 </div>
                 <div>
@@ -704,13 +786,16 @@ export const OrderFunnel = () => {
                   <Input
                     type="date"
                     value={formData.deliveryDate}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        deliveryDate: e.target.value,
-                      })
-                    }
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setFormData({ ...formData, deliveryDate: v });
+                      const err = validateDates(formData.pickupDate, v);
+                      setErrors((s) => ({ ...s, deliveryDate: err }));
+                    }}
                   />
+                  {(errors.pickupDate || errors.deliveryDate) && (
+                    <p className="text-sm text-red-600 mt-1">{errors.pickupDate || errors.deliveryDate}</p>
+                  )}
                 </div>
               </div>
               <div>
@@ -787,6 +872,10 @@ export const OrderFunnel = () => {
                   <p>
                     <span className="font-medium">WhatsApp:</span>{" "}
                     {formData.whatsappNumber}
+                  </p>
+                  <p>
+                    <span className="font-medium">Email:</span>{" "}
+                    {formData.email || "-"}
                   </p>
                   <p>
                     <span className="font-medium">Address:</span>{" "}
@@ -938,6 +1027,7 @@ export const OrderFunnel = () => {
                     measurementChart: null,
                     fullName: "",
                     whatsappNumber: "",
+                    email: "",
                     fullAddress: "",
                     city: "",
                     pincode: "",
@@ -946,6 +1036,7 @@ export const OrderFunnel = () => {
                     deliveryDate: "",
                     specialInstructions: "",
                   });
+                  setErrors({});
                 }}
               >
                 Start Another Order

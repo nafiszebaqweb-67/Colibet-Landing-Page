@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 
 // Load environment variables
 dotenv.config();
@@ -50,7 +51,36 @@ app.get("/test-db", async (req, res) => {
 // Create order endpoint
 // Expects JSON body with shape matching the front-end FormData (file fields should be URLs or filenames)
 app.post("/api/orders", async (req, res) => {
-    const payload = req.body;
+    let payload = req.body || {};
+    // Normalize inputs to avoid validation edge-cases
+    payload.whatsappNumber = (payload.whatsappNumber || "").toString().trim();
+    payload.email = payload.email ? payload.email.toString().trim() : "";
+
+    // Basic server-side validation
+    // Validate Indian mobile number: optional +91, 91 or 0 prefix, then 10 digits starting with 6-9
+    const rawPhone = (payload.whatsappNumber || "").toString().trim();
+    const phoneNorm = rawPhone.replace(/[^0-9+]/g, "");
+    const indianRe = /^(?:\+91|91|0)?[6-9][0-9]{9}$/;
+    if (!indianRe.test(phoneNorm)) {
+        return res.status(400).json({ error: "Invalid whatsappNumber: must be a valid Indian mobile number (10 digits, may include +91/0/91 prefix)." });
+    }
+    if (payload.email) {
+        const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRe.test(payload.email)) {
+            return res.status(400).json({ error: "Invalid email address." });
+        }
+    }
+    if (payload.pickupDate || payload.deliveryDate) {
+        const p = new Date(payload.pickupDate);
+        const d = new Date(payload.deliveryDate);
+        if (isNaN(p.getTime()) || isNaN(d.getTime())) {
+            return res.status(400).json({ error: "Invalid pickup/delivery date." });
+        }
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (p < today) return res.status(400).json({ error: "Pickup date cannot be in the past." });
+        if (d < p) return res.status(400).json({ error: "Delivery date cannot be before pickup date." });
+    }
 
     /* Expected payload (example):
         {
@@ -88,16 +118,41 @@ app.post("/api/orders", async (req, res) => {
         if (Array.isArray(existing) && existing.length > 0) {
             customerId = existing[0].id;
             // update name if changed
-            await conn.query(
-                "UPDATE customers SET name = ? WHERE id = ?",
-                [payload.fullName || null, customerId]
-            );
+            try {
+                await conn.query(
+                    "UPDATE customers SET name = ?, email = ? WHERE id = ?",
+                    [payload.fullName || null, payload.email || null, customerId]
+                );
+            } catch (err) {
+                // If email column doesn't exist, fall back to updating only name
+                if (err && err.code === "ER_BAD_FIELD_ERROR") {
+                    await conn.query(
+                        "UPDATE customers SET name = ? WHERE id = ?",
+                        [payload.fullName || null, customerId]
+                    );
+                } else {
+                    throw err;
+                }
+            }
         } else {
-            const [ins] = await conn.query(
-                "INSERT INTO customers (name, whatsapp_number, created_at) VALUES (?, ?, NOW())",
-                [payload.fullName || null, payload.whatsappNumber]
-            );
-            customerId = ins.insertId;
+            // Try to insert with email column if available
+            try {
+                const [ins] = await conn.query(
+                    "INSERT INTO customers (name, whatsapp_number, email, created_at) VALUES (?, ?, ?, NOW())",
+                    [payload.fullName || null, payload.whatsappNumber, payload.email || null]
+                );
+                customerId = ins.insertId;
+            } catch (err) {
+                if (err && err.code === "ER_BAD_FIELD_ERROR") {
+                    const [ins] = await conn.query(
+                        "INSERT INTO customers (name, whatsapp_number, created_at) VALUES (?, ?, NOW())",
+                        [payload.fullName || null, payload.whatsappNumber]
+                    );
+                    customerId = ins.insertId;
+                } else {
+                    throw err;
+                }
+            }
         }
 
         // Insert order. Try to include status column; fall back if DB schema doesn't have it yet.
@@ -175,6 +230,88 @@ app.post("/api/orders", async (req, res) => {
         }
 
         await conn.commit();
+
+        // Configure SMTP transporter once (used for admin + customer notifications)
+        const transporter = process.env.SMTP_HOST
+            ? nodemailer.createTransport({
+                host: process.env.SMTP_HOST,
+                port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587,
+                secure: process.env.SMTP_SECURE === "true",
+                auth: process.env.SMTP_USER ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } : undefined,
+            })
+            : null;
+
+        // Send one notification email to the configured admin address (if present)
+        const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || process.env.ADMIN_EMAIL || null;
+        if (adminEmail) {
+            if (!transporter) {
+                console.warn("⚠️ SMTP not configured; skipping admin notification email");
+            } else {
+                const subject = `New Order Received — #${orderId}`;
+                const htmlParts = [];
+                htmlParts.push(`<h2>New Order — ID ${orderId}</h2>`);
+                htmlParts.push(`<p><strong>Name:</strong> ${payload.fullName || "-"}</p>`);
+                htmlParts.push(`<p><strong>WhatsApp:</strong> ${payload.whatsappNumber || "-"}</p>`);
+                htmlParts.push(`<p><strong>Email:</strong> ${payload.email || "-"}</p>`);
+                htmlParts.push(`<p><strong>Category:</strong> ${payload.category || "-"}</p>`);
+                htmlParts.push(`<p><strong>Garment:</strong> ${payload.garment || "-"}</p>`);
+                htmlParts.push(`<p><strong>Fabric Type:</strong> ${payload.fabricType || "-"}</p>`);
+                htmlParts.push(`<p><strong>Measurement Type:</strong> ${payload.measurementType || "-"}</p>`);
+                htmlParts.push(`<p><strong>Pickup:</strong> ${payload.pickupDate || "-"} &mdash; <strong>Delivery:</strong> ${payload.deliveryDate || "-"}</p>`);
+                htmlParts.push(`<p><strong>Address:</strong> ${payload.fullAddress || "-"}, ${payload.city || "-"} (${payload.pincode || "-"})</p>`);
+                htmlParts.push(`<p><strong>Special Instructions:</strong> ${payload.specialInstructions || "-"}</p>`);
+                if (Array.isArray(payload.files) && payload.files.length) {
+                    htmlParts.push(`<h3>Files</h3><ul>`);
+                    for (const f of payload.files) {
+                        htmlParts.push(`<li>${f.name || f.url || "file"} (${f.type || "-"}) - ${f.url || "-"}</li>`);
+                    }
+                    htmlParts.push(`</ul>`);
+                }
+
+                try {
+                    await transporter.sendMail({
+                        from: process.env.SMTP_FROM || `no-reply@${process.env.SMTP_HOST || "example.com"}`,
+                        to: adminEmail,
+                        subject,
+                        html: htmlParts.join("\n"),
+                    });
+                    console.log(`📧 Sent order notification to ${adminEmail} for order ${orderId}`);
+                } catch (err) {
+                    console.error("❌ Failed to send order notification email:", err);
+                }
+            }
+        } else {
+            console.warn("⚠️ ADMIN_NOTIFICATION_EMAIL not set; skipping admin email");
+        }
+
+        // Send a thank-you email to the customer if they provided an email
+        if (payload.email) {
+            if (!transporter) {
+                console.warn("⚠️ SMTP not configured; skipping customer thank-you email");
+            } else {
+                const subject = `Thanks for your order — #${orderId}`;
+                const html = `
+                    <p>Hi ${payload.fullName || "Customer"},</p>
+                    <p>Thank you for your order <strong>#${orderId}</strong>. We've received your request and our team will contact you on WhatsApp shortly to confirm pickup and measurements.</p>
+                    <p><strong>Order summary</strong>: ${payload.category || "-"} — ${payload.garment || "-"}</p>
+
+                    <p>Regards,<br/>The Team</p>
+                `;
+
+                try {
+                    await transporter.sendMail({
+                        from: process.env.SMTP_FROM || `no-reply@${process.env.SMTP_HOST || "example.com"}`,
+                        to: payload.email,
+                        subject,
+                        html,
+                    });
+                    console.log(`📧 Sent thank-you email to customer ${payload.email} for order ${orderId}`);
+                } catch (err) {
+                    console.error("❌ Failed to send customer thank-you email:", err);
+                }
+            }
+        }
+
         return res.status(201).json({ ok: true, orderId });
     } catch (err) {
         await conn.rollback();
@@ -217,14 +354,14 @@ app.post("/api/admin/login", async (req, res) => {
 // Middleware to protect admin routes (optional for demo - allow requests without token)
 function authenticateAdmin(req, res, next) {
     const auth = req.headers.authorization;
-    
+
     // If no token, just continue (demo mode)
     if (!auth || !auth.startsWith("Bearer ")) {
         console.log("⚠️  No auth header, continuing in demo mode");
         req.admin = { demo: true };
         return next();
     }
-    
+
     const token = auth.slice(7);
     try {
         const payload = jwt.verify(token, JWT_SECRET);
@@ -242,24 +379,24 @@ function authenticateAdmin(req, res, next) {
 app.get("/api/admin/orders", authenticateAdmin, async (req, res) => {
     try {
         const status = req.query.status ? String(req.query.status) : null;
-        
+
         // Main query: get orders with customer info
-        let query = `SELECT o.*, c.name AS customer_name, c.whatsapp_number
+        let query = `SELECT o.*, c.name AS customer_name, c.whatsapp_number, c.email AS customer_email
              FROM orders o
              LEFT JOIN customers c ON o.customer_id = c.id`;
-        
+
         const params = [];
         if (status) {
             query += ` WHERE COALESCE(o.status, 'new') = ?`;
             params.push(status);
         }
-        
+
         query += ` ORDER BY o.created_at DESC LIMIT 500`;
-        
+
         try {
             const [rows] = await pool.query(query, params);
             console.log(`✅ Fetched ${rows.length} orders (status filter: ${status || 'all'})`);
-            
+
             // For each order, fetch associated files
             const ordersWithFiles = await Promise.all(
                 rows.map(async (order) => {
@@ -281,20 +418,20 @@ app.get("/api/admin/orders", authenticateAdmin, async (req, res) => {
                     }
                 })
             );
-            
+
             return res.json({ orders: ordersWithFiles });
         } catch (err) {
             // If COALESCE fails, the column doesn't exist. Fall back to basic query
             if (err && err.code === "ER_BAD_FIELD_ERROR") {
                 console.warn("⚠️  Status column not found. Using fallback query.");
-                const fallbackQuery = `SELECT o.*, c.name AS customer_name, c.whatsapp_number
+                const fallbackQuery = `SELECT o.*, c.name AS customer_name, c.whatsapp_number, c.email AS customer_email
                      FROM orders o
                      LEFT JOIN customers c ON o.customer_id = c.id
                      ORDER BY o.created_at DESC LIMIT 500`;
-                
+
                 const [rows] = await pool.query(fallbackQuery);
                 console.log(`✅ Fetched ${rows.length} orders (fallback, no status column)`);
-                
+
                 // Attach files for each order
                 const ordersWithFiles = await Promise.all(
                     rows.map(async (order) => {
@@ -315,7 +452,7 @@ app.get("/api/admin/orders", authenticateAdmin, async (req, res) => {
                         }
                     })
                 );
-                
+
                 return res.json({ orders: ordersWithFiles });
             }
             throw err;
@@ -329,7 +466,7 @@ app.get("/api/admin/orders", authenticateAdmin, async (req, res) => {
 // Admin: fetch customers (users) with order counts and total spent
 app.get("/api/admin/users", authenticateAdmin, async (req, res) => {
     try {
-        const query = `SELECT c.id, c.name, c.whatsapp_number, c.created_at,
+        const query = `SELECT c.id, c.name, c.email, c.whatsapp_number, c.created_at,
             COUNT(o.id) AS orders_count,
             COALESCE(SUM(o.amount), 0) AS total_spent
             FROM customers c
@@ -350,22 +487,22 @@ app.get("/api/admin/users", authenticateAdmin, async (req, res) => {
 app.patch("/api/admin/orders/:id/status", authenticateAdmin, async (req, res) => {
     const orderId = req.params.id;
     const { status } = req.body || {};
-    
+
     const validStatuses = ["new", "progress", "completed", "cancelled"];
     if (!validStatuses.includes(status)) {
         return res.status(400).json({ error: `Invalid status. Allowed: ${validStatuses.join(", ")}` });
     }
-    
+
     try {
         const [result] = await pool.query(
             `UPDATE orders SET status = ? WHERE id = ?`,
             [status, orderId]
         );
-        
+
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: "Order not found" });
         }
-        
+
         return res.json({ ok: true, message: `Order status updated to ${status}` });
     } catch (err) {
         console.error("❌ Failed to update order status:", err);
