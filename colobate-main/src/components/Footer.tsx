@@ -83,7 +83,7 @@ export const Footer = () => {
                   rel="noopener noreferrer"
                   className="hover:text-accent transition"
                 >
-                  • Lehenga Stiching
+                  • Lehenga Stitching
                 </a>
               </li>
             </ul>
