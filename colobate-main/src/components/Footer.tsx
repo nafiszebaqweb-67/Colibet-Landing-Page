@@ -215,12 +215,12 @@ export const Footer = () => {
                 Terms of Service
               </a>
               <a
-  href="https://collibet.com"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="hover:text-accent transition-colors"
->
-  collibet.com
+                 href="https://collibet.com"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                className="hover:text-accent transition-colors"
+                >
+               collibet.com
 </a>
             </div>
           </div>
